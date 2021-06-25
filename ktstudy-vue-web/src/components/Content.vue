@@ -31,7 +31,10 @@
             :src="isActive[0] ? iconSrc.basicIcon[0] : iconSrc.basicIcon[1]"
           />
         </div>
-        <div class="basic-info-bottom icon-bottom" :class="{active : isActive[0]}">
+        <div
+          class="basic-info-bottom icon-bottom"
+          :class="{ active: isActive[0] }"
+        >
           <img
             :src="isActive[0] ? iconSrc.basicIcon[1] : iconSrc.basicIcon[0]"
           />
@@ -50,7 +53,10 @@
         <div class="basic-info-top icon-top">
           <img :src="isActive[1] ? iconSrc.dutyIcon[0] : iconSrc.dutyIcon[1]" />
         </div>
-        <div class="basic-info-bottom icon-bottom" :class="{active : isActive[1]}">
+        <div
+          class="basic-info-bottom icon-bottom"
+          :class="{ active: isActive[1] }"
+        >
           <img :src="isActive[1] ? iconSrc.dutyIcon[1] : iconSrc.dutyIcon[0]" />
           <span>职务信息</span>
         </div>
@@ -68,7 +74,10 @@
         <div class="basic-info-top icon-top">
           <img :src="isActive[2] ? iconSrc.roleIcon[0] : iconSrc.roleIcon[1]" />
         </div>
-        <div class="basic-info-bottom icon-bottom" :class="{active : isActive[2]}">
+        <div
+          class="basic-info-bottom icon-bottom"
+          :class="{ active: isActive[2] }"
+        >
           <img :src="isActive[2] ? iconSrc.roleIcon[1] : iconSrc.roleIcon[0]" />
           <span>角色信息</span>
         </div>
@@ -87,7 +96,10 @@
             :src="isActive[3] ? iconSrc.accountIcon[0] : iconSrc.accountIcon[1]"
           />
         </div>
-        <div class="basic-info-bottom icon-bottom" :class="{active : isActive[3]}">
+        <div
+          class="basic-info-bottom icon-bottom"
+          :class="{ active: isActive[3] }"
+        >
           <img
             :src="isActive[3] ? iconSrc.accountIcon[1] : iconSrc.accountIcon[0]"
           />
@@ -415,7 +427,6 @@
           ref="tree"
           class="tree"
           show-checkbox
-          @check-change="handleCheckChange"
         >
         </el-tree>
         <div class="btn">
@@ -428,6 +439,7 @@
 </template>
 
 <script>
+import { ElMessage } from "element-plus";
 export default {
   name: "Content",
   // 接收父组件传过来的人员信息
@@ -510,6 +522,8 @@ export default {
         },
       ],
       addRoleList: [
+        { label: "宁波大学", children: [] },
+        { label: "浙江大学" },
         {
           label: "宁波金唐医院",
           children: [
@@ -611,16 +625,49 @@ export default {
     // 保存添加的角色
     addRoleSave() {
       this.addRoleFlag = false;
-      this.$message({
-        type: "success",
-        message: "角色添加成功",
-      });
-    },
-    // 获取用户在弹窗中选择的角色
-    handleCheckChange(data, checked, indeterminate) {
-      console.log("handleCheckChange");
-      console.log(this.$refs.tree.getCheckedNodes());
-      console.log(data, checked, indeterminate);
+      let checkdNodes = this.$refs.tree.getCheckedNodes();
+      // 用户只选择了机构或角色
+      if (checkdNodes.length !== 2) {
+        ElMessage.error({
+          message: "选择失败，请重新选择(少选或多选)",
+          type: "error",
+        });
+        return;
+      }
+      // 判断用户所选角色与机构的所属关系是否正确
+      let branch = "";
+      let role = "";
+      // 正常情况下机构的id会小于角色的id
+      if (checkdNodes[0].$treeNodeId < checkdNodes[1].$treeNodeId) {
+        branch = checkdNodes[0];
+        role = checkdNodes[1];
+      }
+      // 判断所属关系是否正确
+      if (branch.children && !role.children) {
+        // 存在children，说明是机构
+        let len = branch.$treeNodeId + branch.children.length;
+        console.log(
+          branch.$treeNodeId,
+          branch.children.length,
+          role.$treeNodeId
+        );
+        if (role.$treeNodeId <= len) {
+          ElMessage.success({
+            message: "角色添加成功",
+            type: "success",
+          });
+        } else {
+          ElMessage.error({
+            message: "角色添加成功(所属关系错误)",
+            type: "error",
+          });
+        }
+      } else {
+        ElMessage.error({
+          message: "角色添加成功(两者都是机构或角色或所属关系错误)",
+          type: "error",
+        });
+      }
     },
     // 关闭添加角色的弹窗
     closeWindow() {
@@ -634,25 +681,26 @@ export default {
     scrollGet(e) {
       // 滚动条距离页面顶部的距离（原生兼容）
       let scrollTop = e.srcElement.scrollTop;
-      if (scrollTop < 220) {
+      // 距离要改成动态，在自适应的时候才不会出错
+      if (scrollTop < 100) {
         // console.log('基础信息', scrollTop)
         if (this.isActive[0] === false) {
-          this.isActiveEach(0)
+          this.isActiveEach(0);
         }
-      } else if (scrollTop >= 220 && scrollTop < 300) {
+      } else if (scrollTop >= 100 && scrollTop < 150) {
         // console.log('职务信息', scrollTop)
         if (this.isActive[1] === false) {
-          this.isActiveEach(1)
+          this.isActiveEach(1);
         }
-      } else if (scrollTop >= 300 && scrollTop < 420) {
+      } else if (scrollTop >= 150 && scrollTop < 280) {
         // console.log('角色信息', scrollTop)
         if (this.isActive[2] === false) {
-          this.isActiveEach(2)
+          this.isActiveEach(2);
         }
       } else {
         // console.log("账户信息", scrollTop);
         if (this.isActive[3] === false) {
-          this.isActiveEach(3)
+          this.isActiveEach(3);
         }
       }
     },
@@ -665,7 +713,7 @@ export default {
           return false;
         }
       });
-      console.log(this.isActive);
+      // console.log(this.isActive);
     },
   },
 };
@@ -702,7 +750,7 @@ export default {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
-    margin-bottom: 50px;
+    margin-bottom: 35px;
     .icon-box {
       // width: 120px;
       .icon-top,
@@ -748,7 +796,7 @@ export default {
     }
   }
   .formbox {
-    height: 70%;
+    height: 72%;
     overflow: auto;
     .title {
       display: flex;
@@ -798,7 +846,7 @@ export default {
       .report-pwd-box {
         // width: 420px;
         text-align: center;
-        margin: 0 0 20px;
+        margin: 0 21px 20px;
         p {
           margin: 0;
           width: 100px;
@@ -846,7 +894,7 @@ export default {
           display: flex;
           flex-wrap: wrap;
           p {
-            margin: 0;
+            margin: 0 0 0 24px;
             font-family: MicrosoftYaHei;
             font-size: 14px;
             letter-spacing: 0.54px;
@@ -907,8 +955,8 @@ export default {
             align-items: center;
             cursor: pointer;
             img {
-              width: 80%;
-              height: 60%;
+              width: 50%;
+              height: 30%;
             }
           }
         }

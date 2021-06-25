@@ -66,6 +66,7 @@ export default {
     height: 100%;
     .side{
       width: 320px;
+      height: 100%;
       box-sizing: border-box;
       padding: 20px 15px;
       margin-right: 2px;
@@ -74,6 +75,7 @@ export default {
     }
     .content{
       flex: 1;
+      min-width: 520px;
       box-sizing: border-box;
       padding: 20px 20px;
       // border: 1px solid #f40;

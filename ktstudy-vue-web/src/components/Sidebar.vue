@@ -8,12 +8,23 @@
     >
     </el-input>
     <!-- <p class="open">全部展开</p> -->
-    <el-button class="open-button open-button-text" @click="expand()" type="text"
+    <el-button
+      class="open-button open-button-text"
+      @click="expand()"
+      type="text"
       >全部展开</el-button
     >
-    <div class="menu">
-      <el-tree :data="personList" v-if="refreshTree" ref="selectTree" :default-expand-all="expandAll" class="text"></el-tree>
-    </div>
+    <el-scrollbar>
+      <div class="menu">
+        <el-tree
+          :data="personList"
+          v-if="refreshTree"
+          ref="selectTree"
+          :default-expand-all="expandAll"
+          class="text"
+        ></el-tree>
+      </div>
+    </el-scrollbar>
   </div>
 </template>
 <script>
@@ -25,19 +36,25 @@ export default {
       search: "",
       personList: [
         {
-          label: "机构编码-机构名称（机构状态）",
+          label: "集团",
           children: [
             {
-              label: "科室类型",
+              label: "未来N+院区",
+              children: [],
+            },
+            {
+              label: "治疗科室",
               children: [
                 {
                   label: "科室名称",
                   children: [
                     {
                       label: "1103张三",
+                      type: "stop",
                     },
                     {
                       label: "1106李四",
+                      type: "using",
                     },
                   ],
                 },
@@ -46,36 +63,66 @@ export default {
                   children: [
                     {
                       label: "1103张三",
+                      type: "delete",
                     },
                     {
                       label: "1106李四",
+                      type: "stop",
+                    },
+                  ],
+                },
+                {
+                  label: "科室名称3",
+                  children: [
+                    {
+                      label: "1103张三",
+                      type: "stop",
+                    },
+                    {
+                      label: "1106李四",
+                      type: "using",
+                    },
+                  ],
+                },
+                {
+                  label: "科室名称4",
+                  children: [
+                    {
+                      label: "1103张三",
+                      type: "stop",
+                    },
+                    {
+                      label: "1106李四",
+                      type: "using",
+                    },
+                  ],
+                },
+                {
+                  label: "科室名称4",
+                  children: [
+                    {
+                      label: "1103张三",
+                      type: "stop",
+                    },
+                    {
+                      label: "1106李四",
+                      type: "using",
                     },
                   ],
                 },
               ],
             },
             {
-              label: "科室类型2",
+              label: "急诊科室",
               children: [
                 {
-                  label: "科室名称",
+                  label: "急诊科",
                   children: [
                     {
-                      label: "1103张三",
+                      label: "120327 王科亮",
                     },
                     {
-                      label: "1106李四",
-                    },
-                  ],
-                },
-                {
-                  label: "科室名称2",
-                  children: [
-                    {
-                      label: "1103张三",
-                    },
-                    {
-                      label: "1106李四",
+                      label: "120331 袁杰",
                     },
                   ],
                 },
@@ -89,44 +136,49 @@ export default {
   methods: {
     expand() {
       // 重新渲染树形控件，实现展开收起
-      this.refreshTree = false
-      this.expandAll = !this.expandAll
-      // this.$nextTick(() => {
-      //   this.refreshTree = true
-      // })
-    }
+      this.refreshTree = false;
+      this.expandAll = !this.expandAll;
+      this.$nextTick(() => {
+        this.refreshTree = true;
+      });
+    },
   },
 };
 </script>
 <style lang="scss">
 .sidebar {
+  // border: 1px solid #000;
   .search {
     width: 290px;
     height: 30px;
   }
   .open-button {
-    // margin: 10px 0;
     margin-top: 10px;
     padding: 0;
     height: 19px;
-    // border: 1px solid #000;
-  }
-  .el-button {
-    min-height: 19px;
-    line-height: normal;
-  }
-  .open-button-text {
-    font-size: 14px;
-    color: #339dff;
-  }
-  .menu {
-    margin-top: 20px;
-    .text {
-      font-family: MicrosoftYaHei;
+    &.el-button {
+      min-height: 19px;
+      line-height: normal;
+    }
+    &.open-button-text {
       font-size: 14px;
-      color: #333333;
-      letter-spacing: 0.73px;
-      font-weight: 400;
+      color: #339dff;
+    }
+  }
+  .el-scrollbar {
+    height: 87%;
+    margin-top: 5px;
+    // border: 1px solid #000;
+    .menu {
+      // height: 87%;
+      // overflow: auto;
+      .text {
+        font-family: MicrosoftYaHei;
+        font-size: 14px;
+        color: #333333;
+        letter-spacing: 0.73px;
+        font-weight: 400;
+      }
     }
   }
 }
