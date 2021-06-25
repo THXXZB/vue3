@@ -1,4 +1,5 @@
 <template>
+  <div id="news">
   <div>
     <h2>axios和fetch-jsonp实现数据请求</h2>
     <button @click="getData()">axios获取数据</button>
@@ -11,16 +12,30 @@
     </ul>
   </div>
   <Baidu></Baidu>
+  <hr>
+  <button @click="isVisiable=true">打开弹窗</button>
+  <pop-window :visiable="isVisiable" :title="winTitle" @close-win="isVisiable=false">
+    请输入内容：
+    <input/>
+  </pop-window>
+  </div>
+  
 </template>
 <script>
 import Baidu from '../components/baidu.vue';
+import PopWindow from '../components/pop-window.vue'
 export default {
-  components: { Baidu },
+  components: { 
+    Baidu, 
+    "pop-window": PopWindow
+  },
   name: "News",
   data() {
     return {
       list: [],
-      jsonpList: []
+      jsonpList: [],
+      winTitle: "登录",
+      isVisiable: false
     };
   },
   mounted() {
@@ -58,3 +73,10 @@ export default {
   },
 };
 </script>
+<style lang="scss">
+  #news{
+    width: 800px;
+    height: 200px;
+    position: relative
+  }
+</style>
