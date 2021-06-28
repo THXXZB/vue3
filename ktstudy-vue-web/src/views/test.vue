@@ -2,7 +2,9 @@
 <template>
   <div class="custom-tree-container">
     <div class="block">
-      <p>使用 render-content</p>
+      <el-tooltip content="item.branchName" placement="buttom">
+        <p>使用 render-content</p>
+      </el-tooltip>
       <el-tree
         :data="data"
         show-checkbox
@@ -12,6 +14,9 @@
         :render-content="renderContent"
       >
       </el-tree>
+      <el-tooltip content="Bottom center" placement="bottom" effect="light">
+        <el-button>Light</el-button>
+      </el-tooltip>
     </div>
   </div>
 </template>
@@ -76,11 +81,11 @@ export default {
   },
 
   methods: {
-    renderContent(h, { node, data}) {
-      console.log(data)
-      let className = "custom-tree-node"
-      if (data.type && data.type==="stop") {
-        className = "custom-tree-node active"
+    renderContent(h, { node, data }) {
+      console.log(data);
+      let className = "custom-tree-node";
+      if (data.type && data.type === "stop") {
+        className = "custom-tree-node active";
       }
       return h(
         "span",
@@ -103,7 +108,7 @@ export default {
   font-size: 14px;
   padding-right: 8px;
 }
-.active{
+.active {
   color: #f40;
 }
 </style>

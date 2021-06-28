@@ -26,11 +26,6 @@
     <!-- 图标目录栏 -->
     <div class="iconbox">
       <div class="basic-info icon-box">
-        <div class="basic-info-top icon-top">
-          <img
-            :src="isActive[0] ? iconSrc.basicIcon[0] : iconSrc.basicIcon[1]"
-          />
-        </div>
         <div
           class="basic-info-bottom icon-bottom"
           :class="{ active: isActive[0] }"
@@ -42,7 +37,6 @@
         </div>
       </div>
       <div class="short-line">
-        <div class="space"></div>
         <div class="line">
           <img
             src="http://10.1.50.183:8011/images/%E4%BA%BA%E5%91%98%E7%AE%A1%E7%90%86/u12608.png"
@@ -50,9 +44,6 @@
         </div>
       </div>
       <div class="duty-info icon-box">
-        <div class="basic-info-top icon-top">
-          <img :src="isActive[1] ? iconSrc.dutyIcon[0] : iconSrc.dutyIcon[1]" />
-        </div>
         <div
           class="basic-info-bottom icon-bottom"
           :class="{ active: isActive[1] }"
@@ -62,8 +53,6 @@
         </div>
       </div>
       <div class="short-line">
-        <div class="space"></div>
-
         <div class="line">
           <img
             src="http://10.1.50.183:8011/images/%E4%BA%BA%E5%91%98%E7%AE%A1%E7%90%86/u12608.png"
@@ -71,9 +60,6 @@
         </div>
       </div>
       <div class="role-info icon-box">
-        <div class="basic-info-top icon-top">
-          <img :src="isActive[2] ? iconSrc.roleIcon[0] : iconSrc.roleIcon[1]" />
-        </div>
         <div
           class="basic-info-bottom icon-bottom"
           :class="{ active: isActive[2] }"
@@ -83,7 +69,6 @@
         </div>
       </div>
       <div class="short-line">
-        <div class="space"></div>
         <div class="line">
           <img
             src="http://10.1.50.183:8011/images/%E4%BA%BA%E5%91%98%E7%AE%A1%E7%90%86/u12608.png"
@@ -91,11 +76,6 @@
         </div>
       </div>
       <div class="account-info icon-box">
-        <div class="basic-info-top icon-top">
-          <img
-            :src="isActive[3] ? iconSrc.accountIcon[0] : iconSrc.accountIcon[1]"
-          />
-        </div>
         <div
           class="basic-info-bottom icon-bottom"
           :class="{ active: isActive[3] }"
@@ -108,8 +88,6 @@
       </div>
     </div>
     <!-- 表单内容 -->
-    <!-- {{ peopleData }}<br />
-    {{ formData }}---{{ cardType }} -->
     <div class="formbox" @scroll="scrollGet($event)">
       <!-- 基础信息 -->
       <div class="basic-form-box">
@@ -342,27 +320,37 @@
         <!-- 角色添加展示 -->
         <div class="form-box">
           <div class="flex-start">
-            <p>人员角色 ：</p>
-            <div
-              class="role-box role-icon"
-              v-for="(item, index) in roleList"
-              :key="index"
-              @click="deleteRole(index)"
-            >
-              <!-- 角色名称 -->
-              <div class="role-header">
-                <p>{{ item.roleName }}</p>
+            <p class="title-text">人员角色 ：</p>
+            <div class="flex-role">
+              <div
+                class="role-box"
+                v-for="(item, index) in roleList"
+                :key="index"
+              >
+                <!-- 角色名称 -->
+                <div class="role-header">
+                  <p>{{ item.roleName }}</p>
+                </div>
+                <!-- 机构信息 -->
+                <div class="role-body">
+                  <!-- 机构代码 -->
+                  <p class="branch-code">{{ item.branchCode }}</p>
+                  <!-- 机构名称 -->
+                  <el-tooltip
+                    :content="item.branchName"
+                    placement="bottom"
+                    effect="dark"
+                  >
+                    <p class="branch-name">
+                      {{ item.branchName }}
+                    </p>
+                  </el-tooltip>
+                </div>
+                <div class="role-icon" @click="deleteRole(index)"></div>
               </div>
-              <!-- 机构信息 -->
-              <div class="role-body">
-                <!-- 机构代码 -->
-                <p class="branch-code">{{ item.branchCode }}</p>
-                <!-- 机构名称 -->
-                <p class="branch-name">{{ item.branchName }}</p>
+              <div class="add-role-box" @click="addRole()">
+                <img src="../assets/add.svg" alt="" />
               </div>
-            </div>
-            <div class="add-role-box" @click="addRole()">
-              <img src="../assets/add.svg" alt="" />
             </div>
           </div>
         </div>
@@ -427,7 +415,8 @@
           ref="tree"
           class="tree"
           show-checkbox
-          :filter-node-method="roleSearch"
+          :check-on-click-node="true"
+          :filter-node-method="roleLikeSearch"
         >
         </el-tree>
         <div class="btn">
@@ -445,7 +434,9 @@ export default {
   name: "Content",
   // 接收父组件传过来的人员信息
   props: {
-    peopleData: Object,
+    peopleData: {
+      type: Object,
+    },
   },
   data() {
     return {
@@ -521,6 +512,21 @@ export default {
           branchCode: "GM0681",
           branchName: "宁波金唐医院",
         },
+        {
+          roleName: "管理员D",
+          branchCode: "GM0681",
+          branchName: "宁波金唐医院",
+        },
+        {
+          roleName: "管理员E",
+          branchCode: "GM0681",
+          branchName: "宁波金唐第三附属支医院三",
+        },
+        {
+          roleName: "管理员F",
+          branchCode: "GM0681",
+          branchName: "宁波金唐医院",
+        },
       ],
       addRoleList: [
         { label: "宁波大学", children: [] },
@@ -573,7 +579,7 @@ export default {
   },
   watch: {
     roleSearch(val) {
-      this.$refs.selectTree.filter(val);
+      this.$refs.tree.filter(val);
     },
   },
   methods: {
@@ -721,6 +727,11 @@ export default {
       });
       // console.log(this.isActive);
     },
+    // 添加角色弹窗模糊查找
+    roleLikeSearch(value, data) {
+      if (!value) return true;
+      return data.label.indexOf(value) !== -1;
+    },
   },
 };
 </script>
@@ -758,7 +769,6 @@ export default {
     justify-content: space-around;
     margin-bottom: 35px;
     .icon-box {
-      // width: 120px;
       .icon-top,
       .icon-bottom {
         img {
@@ -788,22 +798,17 @@ export default {
       }
     }
     .short-line {
-      // width: 100px;
       text-align: center;
-      .space {
-        height: 50%;
-      }
-
       img {
         width: 20px;
         height: 1px;
-        vertical-align: middle;
       }
     }
   }
   .formbox {
-    height: 72%;
+    height: 77%;
     overflow: auto;
+    // border: 1px solid #a1f;
     .title {
       display: flex;
       height: 19px;
@@ -896,73 +901,86 @@ export default {
     .role-form-box {
       .form-box {
         .flex-start {
-          width: 80%;
+          width: 84%;
+          // border: 1px solid #f40;
           display: flex;
           flex-wrap: wrap;
           p {
-            margin: 0 0 0 24px;
+            margin: 0;
             font-family: MicrosoftYaHei;
             font-size: 14px;
             letter-spacing: 0.54px;
             font-weight: 400;
-          }
-          .role-box {
-            height: 80px;
-            margin: 0 20px 20px 0;
-            background: #4ca9ff;
-            border: 1px solid #4ca9ff;
-            border-radius: 5px;
-            text-align: center;
-            .role-header,
-            .role-body {
-              p {
-                padding: 5px 0;
-                color: #fff;
-              }
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            &.title-text {
+              // height: 100%;
+              
+              // margin: 0 24px 0 0;
             }
-            .role-body {
-              background-color: #fff;
-              border-radius: 0 0 5px 5px;
-              p {
-                margin: 0;
-                padding: 6px 10px 2px;
-                color: #409dfd;
-                &.branch-name {
-                  padding: 2px 10px 4px;
+          }
+          .flex-role {
+            width: 83%;
+            display: flex;
+            flex-wrap: wrap;
+            // border: 1px solid #000;
+            .role-box {
+              width: 120px;
+              height: 80px;
+              position: relative;
+              margin: 0 20px 20px 0;
+              background: #4ca9ff;
+              border: 1px solid #4ca9ff;
+              border-radius: 5px;
+              text-align: center;
+              .role-header,
+              .role-body {
+                p {
+                  padding: 5px 0;
+                  color: #fff;
                 }
               }
+              .role-body {
+                background-color: #fff;
+                border-radius: 0 0 5px 5px;
+                p {
+                  margin: 0;
+                  padding: 6px 10px 2px;
+                  color: #409dfd;
+                  &.branch-name {
+                    padding: 2px 10px 4px;
+                  }
+                }
+              }
+              .role-icon {
+                // 取消元素的鼠标事件
+                // pointer-events: none;
+                width: 14px;
+                height: 14px;
+                position: absolute;
+                top: -8px;
+                right: -8px;
+                background-size: contain;
+                background-image: url("../assets/delete.svg");
+                cursor: pointer;
+                // 给伪类添加鼠标事件
+                // pointer-events: auto;
+              }
             }
-          }
-          .role-icon {
-            position: relative;
-            // 取消元素的鼠标事件
-            pointer-events: none;
-            &:after {
-              content: "";
-              width: 14px;
-              height: 14px;
-              position: absolute;
-              top: -8px;
-              right: -8px;
-              background-size: contain;
-              background-image: url("../assets/delete.svg");
+            .add-role-box {
+              width: 120px;
+              height: 80px;
+              border: 1px solid #dddee0;
+              border-radius: 5px;
+              display: flex;
+              justify-content: center;
+              align-items: center;
               cursor: pointer;
-              // 给伪类添加鼠标事件
-              pointer-events: auto;
-            }
-          }
-          .add-role-box {
-            width: 120px;
-            height: 80px;
-            border: 1px solid #dddee0;
-            border-radius: 5px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            img {
-              width: 50%;
-              height: 30%;
+              img {
+                width: 50%;
+                height: 30%;
+              }
             }
           }
         }

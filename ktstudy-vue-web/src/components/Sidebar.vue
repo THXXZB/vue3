@@ -114,6 +114,69 @@ export default {
                 },
               ],
             },
+            {
+              id: 5,
+              label: "急诊科室5",
+              children: [
+                {
+                  id: 9,
+                  label: "急诊科9",
+                  children: [
+                    {
+                      id: 13,
+                      label: "120327 王科亮13 (stop)",
+                      type: "stop",
+                    },
+                    {
+                      id: 14,
+                      label: "120331 袁杰14",
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              id: 5,
+              label: "急诊科室5",
+              children: [
+                {
+                  id: 9,
+                  label: "急诊科9",
+                  children: [
+                    {
+                      id: 13,
+                      label: "120327 王科亮13 (stop)",
+                      type: "stop",
+                    },
+                    {
+                      id: 14,
+                      label: "120331 袁杰14",
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              id: 5,
+              label: "急诊科室5",
+              children: [
+                {
+                  id: 9,
+                  label: "急诊科9",
+                  children: [
+                    {
+                      id: 13,
+                      label: "120327 王科亮13 (stop)",
+                      type: "stop",
+                    },
+                    {
+                      id: 14,
+                      label: "120331 袁杰14",
+                    },
+                  ],
+                },
+              ],
+            },
           ],
         },
       ],
@@ -126,6 +189,7 @@ export default {
   },
   mounted() {},
   methods: {
+    // 全部展开
     expand() {
       // 重新渲染树形控件，实现展开收起
       this.refreshTree = false;
@@ -134,10 +198,12 @@ export default {
         this.refreshTree = true;
       });
     },
+    // 过滤关键字
     filterNode(value, data) {
       if (!value) return true;
       return data.label.indexOf(value) !== -1;
     },
+    // 自定义节点，即停用账号用红色字体显示
     renderContent(h, { node, data }) {
       // console.log(data);
       let className = "";
@@ -152,8 +218,9 @@ export default {
         h("span", null, node.label)
       );
     },
+    // 点击节点，获取当前账号的信息
     handleNodeClick(data) {
-      console.log("点击节点:", data);
+      console.log("点击节点:", data.label);
     },
   },
 };

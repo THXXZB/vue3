@@ -1,6 +1,8 @@
 <template>
   <div class="home">
+    <!-- 侧边栏 -->
     <Sidebar class="side"></Sidebar>
+    <!-- 当前人员信息内容展示区 -->
     <Content :peopleData="data2" class="content"/>
   </div>
 </template>
@@ -75,7 +77,7 @@ export default {
     }
     .content{
       flex: 1;
-      min-width: 520px;
+      min-width: 670px;
       box-sizing: border-box;
       padding: 20px 20px;
       // border: 1px solid #f40;
