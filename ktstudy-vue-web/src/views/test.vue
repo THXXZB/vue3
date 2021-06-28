@@ -1,86 +1,109 @@
 
 <template>
-  <h1>test</h1>
-  <div class="flexbox">
-    <div class="slide">
-      <button @click="change">isActive</button>
-    </div>
-    <div class="content">
-      <div class="div1"></div>
-      <div class="div2"></div>
-      <div class="div3"></div>
-      <div class="div4"></div>
-      <div class="div5"></div>
-      <div class="div6"></div>
+  <div class="custom-tree-container">
+    <div class="block">
+      <p>使用 render-content</p>
+      <el-tree
+        :data="data"
+        show-checkbox
+        node-key="id"
+        default-expand-all
+        :expand-on-click-node="false"
+        :render-content="renderContent"
+      >
+      </el-tree>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "Test",
   data() {
+    const data = [
+      {
+        id: 1,
+        label: "一级 1",
+        type: "stop",
+        children: [
+          {
+            id: 4,
+            label: "二级 1-1",
+            children: [
+              {
+                id: 9,
+                label: "三级 1-1-1",
+              },
+              {
+                id: 10,
+                label: "三级 1-1-2",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        id: 2,
+        label: "一级 2",
+        children: [
+          {
+            id: 5,
+            label: "二级 2-1",
+          },
+          {
+            id: 6,
+            label: "二级 2-2",
+          },
+        ],
+      },
+      {
+        id: 3,
+        label: "一级 3",
+        children: [
+          {
+            id: 7,
+            label: "二级 3-1",
+          },
+          {
+            id: 8,
+            label: "二级 3-2",
+          },
+        ],
+      },
+    ];
     return {
-      isActive: [true, false, false, false]
-    }
+      data: JSON.parse(JSON.stringify(data)),
+    };
   },
-  methods: {
-    change() {
-      this.isActive = this.isActive.map((item, i) => {
-        if (i === 1) {
-          return true
-        } else {
-          return false
-        }
-      })
-      console.log(this.isActive)
-    }
 
+  methods: {
+    renderContent(h, { node, data}) {
+      console.log(data)
+      let className = "custom-tree-node"
+      if (data.type && data.type==="stop") {
+        className = "custom-tree-node active"
+      }
+      return h(
+        "span",
+        {
+          class: className,
+        },
+        h("span", null, node.label)
+      );
+    },
   },
 };
 </script>
 
-<style scope>
-.flexbox {
-  display: flex;
-  width: 100%;
-  flex-wrap: wrap;
-}
-.slide{
-  width: 200px;
-  background-color: #abe;
-}
-.content{
+<style>
+.custom-tree-node {
   flex: 1;
   display: flex;
-  flex-wrap: wrap;
-  background-color: #ff9;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  padding-right: 8px;
 }
-.div1,
-.div2,
-.div3,
-.div4,
-.div5,
-.div6 {
-  width: 300px;
-  height: 100px;
-}
-.div1 {
-  border: 1px solid #000;
-}
-.div2 {
-  border: 1px solid #f40;
-}
-.div3 {
-  border: 1px solid #a40;
-}
-.div4 {
-  border: 1px solid #000;
-}
-.div5 {
-  border: 1px solid #f40;
-}
-.div6 {
-  border: 1px solid #a40;
+.active{
+  color: #f40;
 }
 </style>

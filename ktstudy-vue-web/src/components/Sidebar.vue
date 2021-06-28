@@ -4,7 +4,7 @@
       class="search"
       placeholder="请输入关键字进行过滤"
       prefix-icon="el-icon-search"
-      v-model="search"
+      v-model="filterText"
     >
     </el-input>
     <!-- <p class="open">全部展开</p> -->
@@ -20,7 +20,11 @@
           :data="personList"
           v-if="refreshTree"
           ref="selectTree"
+          node-key="id"
           :default-expand-all="expandAll"
+          :filter-node-method="filterNode"
+          :render-content="renderContent"
+          @node-click="handleNodeClick"
           class="text"
         ></el-tree>
       </div>
@@ -33,96 +37,78 @@ export default {
     return {
       expandAll: false,
       refreshTree: true,
-      search: "",
+      filterText: "",
       personList: [
         {
-          label: "集团",
+          id: 1,
+          label: "集团1",
           children: [
             {
-              label: "未来N+院区",
+              id: 2,
+              label: "未来N+院区2",
               children: [],
             },
             {
-              label: "治疗科室",
+              id: 3,
+              label: "治疗科室3",
               children: [
                 {
-                  label: "科室名称",
+                  id: 6,
+                  label: "科室名称6",
                   children: [
                     {
-                      label: "1103张三",
+                      id: 10,
+                      label: "1103张三10(stop)",
                       type: "stop",
-                    },
-                    {
-                      label: "1106李四",
-                      type: "using",
                     },
                   ],
                 },
                 {
-                  label: "科室名称2",
+                  id: 7,
+                  label: "科室名称7",
                   children: [
                     {
-                      label: "1103张三",
+                      id: 11,
+                      label: "1103张三11",
                       type: "delete",
-                    },
-                    {
-                      label: "1106李四",
-                      type: "stop",
-                    },
-                  ],
-                },
-                {
-                  label: "科室名称3",
-                  children: [
-                    {
-                      label: "1103张三",
-                      type: "stop",
-                    },
-                    {
-                      label: "1106李四",
-                      type: "using",
-                    },
-                  ],
-                },
-                {
-                  label: "科室名称4",
-                  children: [
-                    {
-                      label: "1103张三",
-                      type: "stop",
-                    },
-                    {
-                      label: "1106李四",
-                      type: "using",
-                    },
-                  ],
-                },
-                {
-                  label: "科室名称4",
-                  children: [
-                    {
-                      label: "1103张三",
-                      type: "stop",
-                    },
-                    {
-                      label: "1106李四",
-                      type: "using",
                     },
                   ],
                 },
               ],
             },
             {
-              label: "急诊科室",
+              id: 4,
+              label: "治疗科室4",
               children: [
                 {
-                  label: "急诊科",
+                  id: 8,
+                  label: "科室名称8",
                   children: [
                     {
-                      label: "120327 王科亮",
+                      id: 12,
+                      label: "1103张三12(stop)",
+                      type: "stop",
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              id: 5,
+              label: "急诊科室5",
+              children: [
+                {
+                  id: 9,
+                  label: "急诊科9",
+                  children: [
+                    {
+                      id: 13,
+                      label: "120327 王科亮13 (stop)",
+                      type: "stop",
                     },
                     {
-                      label: "120331 袁杰",
+                      id: 14,
+                      label: "120331 袁杰14",
                     },
                   ],
                 },
@@ -133,6 +119,12 @@ export default {
       ],
     };
   },
+  watch: {
+    filterText(val) {
+      this.$refs.selectTree.filter(val);
+    },
+  },
+  mounted() {},
   methods: {
     expand() {
       // 重新渲染树形控件，实现展开收起
@@ -141,6 +133,27 @@ export default {
       this.$nextTick(() => {
         this.refreshTree = true;
       });
+    },
+    filterNode(value, data) {
+      if (!value) return true;
+      return data.label.indexOf(value) !== -1;
+    },
+    renderContent(h, { node, data }) {
+      // console.log(data);
+      let className = "";
+      if (data.type && data.type === "stop") {
+        className = "active";
+      }
+      return h(
+        "span",
+        {
+          class: className,
+        },
+        h("span", null, node.label)
+      );
+    },
+    handleNodeClick(data) {
+      console.log("点击节点:", data);
     },
   },
 };
@@ -178,6 +191,12 @@ export default {
         color: #333333;
         letter-spacing: 0.73px;
         font-weight: 400;
+        // span{
+
+        // }
+      }
+      .active {
+        color: #ff6a6a;
       }
     }
   }

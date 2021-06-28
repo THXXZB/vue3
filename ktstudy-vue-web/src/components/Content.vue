@@ -427,6 +427,7 @@
           ref="tree"
           class="tree"
           show-checkbox
+          :filter-node-method="roleSearch"
         >
         </el-tree>
         <div class="btn">
@@ -569,6 +570,11 @@ export default {
         ],
       },
     };
+  },
+  watch: {
+    roleSearch(val) {
+      this.$refs.selectTree.filter(val);
+    },
   },
   methods: {
     // 保存用户信息
