@@ -29,23 +29,31 @@
     <input type="text" v-model="originalObj.aniName" />
   </div>
   <br />
-  <button @click="setMsg" style="color: #f40">在composition组件修改msg</button>
-  <button @click="setTitle" style="color: #7ba">
-    在composition组件修改title</button
-  ><br /> <br>
-  <div style="color: #73a">
-    dogName: <input type="text" v-model="aniName" /> dogAge:
-    <input type="text" v-model="aniAge" />
+  <div>
+    组合api + provide inject
+    <button @click="setMsg" style="color: #f40">
+      在composition组件修改msg
+    </button>
+    <button @click="setTitle" style="color: #7ba">
+      在composition组件修改title</button
+    ><br />
+    <br />
+    <div style="color: #73a">
+      dogName: <input type="text" v-model="aniName" /> dogAge:
+      <input type="text" v-model="aniAge" />
+    </div>
   </div>
-
   <hr />
-  <search :msg="msg"></search>
+  <Search :msg="msg"></Search>
+  <hr>
+  <use-composition-api></use-composition-api>
 </template>
 <script>
 import { ref, reactive, toRefs, computed, provide } from "vue";
-import search from "../components/search.vue";
+import Search from "../components/search.vue";
+import UseCompositionApi from "../components/use-composition-api.vue";
 export default {
-  components: { search },
+  components: { Search, "use-composition-api": UseCompositionApi },
   name: "Composition",
   data() {
     return { msg: "composition中的msg" };
@@ -53,12 +61,12 @@ export default {
   // setup定义数据data和方法method
   // setup有两个方法ref和reactive，用来定义响应式数据用来
   setup() {
-    // ref 定义number、string、boolean 、数组
+    // ref 定义number、string、boolean等简单类型
     let title = ref("I am a title from composition");
     // provide传值(key, value)
     provide("title", title);
 
-    // reactive定义对象
+    // reactive定义对象数组等复杂类型
     let userInfo = reactive({
       username: "tt",
       age: "22",

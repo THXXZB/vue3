@@ -14,6 +14,7 @@ export default {
   setup() {
     let title = inject("title");
     let dog = inject("dog");
+    
     return {
       title,
       ...toRefs(dog),

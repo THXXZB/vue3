@@ -11,9 +11,11 @@
     keyWord:{{ keyWord }} <br />
     <h2>setup生命周期函数</h2>
     <!-- https://blog.csdn.net/weixin_43899943/article/details/110388072?utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.control&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.control -->
-    setup函数是处于 生命周期函数 beforeCreate 和 Created
-    两个钩子函数之间的函数,即在这两个钩子中的任何代码都应该在setup中直接编写,
-    所以setup的生命周期函数没有beforeCreate和created <br />
+    <s>setup函数是处于 生命周期函数 beforeCreate 和 Created两个钩子函数之间的函数 </s><br />
+    因为 setup 是围绕 beforeCreate 和 created 生命周期钩子运行的，
+    所以不需要显式地定义它们。换句话说，在这些钩子中编写的任何代码都应该直接在 setup 函数中编写。<br>
+    setup中无法使用option api中的data和method，为避免使用错误，setup中的this指向undefined <br>
+    setup函数只能同步，不能异步<br>
     setup的声明周期函数有：onBeforeMount, onMounted, onBeforeUpdate, onUpdated,
     onBeforeUnmount, onUnmounted, onErrorCaptured, onRenderTracked,
     onRenderTriggered
