@@ -227,7 +227,6 @@ export default {
 </script>
 <style lang="scss">
 .sidebar {
-  // border: 1px solid #000;
   .search {
     width: 290px;
     height: 30px;
@@ -250,8 +249,6 @@ export default {
     margin-top: 5px;
     // border: 1px solid #000;
     .menu {
-      // height: 87%;
-      // overflow: auto;
       .text {
         font-family: MicrosoftYaHei;
         font-size: 14px;

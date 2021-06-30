@@ -66,6 +66,7 @@ export default {
     box-sizing: border-box;
     background-color: #F0F2F5;
     height: 100%;
+    position: relative;
     .side{
       width: 320px;
       height: 100%;

@@ -396,35 +396,37 @@
     </div>
     <!-- 添加角色弹窗 -->
     <div class="role-window" v-show="addRoleFlag">
-      <div class="role-window-header">
-        <span>添加角色</span>
-        <i @click="addRoleBack()"></i>
-      </div>
-      <div class="role-window-body">
-        <el-input
-          class="search"
-          placeholder="可模糊查找"
-          prefix-icon="el-icon-search"
-          v-model="roleSearch"
-        >
-        </el-input>
-        <el-tree
-          :data="addRoleList"
-          :check-strictly="true"
-          :default-expand-all="true"
-          ref="tree"
-          class="tree"
-          show-checkbox
-          :check-on-click-node="true"
-          :filter-node-method="roleLikeSearch"
-        >
-        </el-tree>
-        <div class="btn">
-          <el-button @click="addRoleBack()">取消</el-button>
-          <el-button @click="addRoleSave()" type="primary">保存</el-button>
+        <div class="role-window-header">
+          <span>添加角色</span>
+          <i @click="addRoleBack()"></i>
+        </div>
+        <div class="role-window-body">
+          <el-input
+            class="search"
+            placeholder="可模糊查找"
+            prefix-icon="el-icon-search"
+            v-model="roleSearch"
+          >
+          </el-input>
+          <el-scrollbar>
+            <el-tree
+              :data="addRoleList"
+              :check-strictly="true"
+              :default-expand-all="true"
+              ref="tree"
+              class="tree"
+              show-checkbox
+              :check-on-click-node="true"
+              :filter-node-method="roleLikeSearch"
+            >
+            </el-tree>
+          </el-scrollbar>
+          <div class="btn">
+            <el-button @click="addRoleBack()">取消</el-button>
+            <el-button @click="addRoleSave()" type="primary">保存</el-button>
+          </div>
         </div>
       </div>
-    </div>
   </div>
 </template>
 
@@ -530,7 +532,24 @@ export default {
       ],
       addRoleList: [
         { label: "宁波大学", children: [] },
-        { label: "浙江大学" },
+        { label: "浙江大学",
+          children: [
+              {
+                label: "管理员A",
+              },
+              {
+                label: "管理员B",
+              },
+              {
+                label: "管理员C",
+              },
+              {
+                label: "管理员d",
+              },
+              {
+                label: "管理员e",
+              },
+            ], },
         {
           label: "宁波金唐医院",
           children: [
@@ -915,13 +934,15 @@ export default {
             white-space: nowrap;
             text-overflow: ellipsis;
             &.title-text {
-              // height: 100%;
-              
-              // margin: 0 24px 0 0;
+              height: 100%;
+              // border: 1px solid #380;
+              padding: 0 0 0 45px;
+              box-sizing: border-box;
             }
           }
           .flex-role {
-            width: 83%;
+            // width: 84%;
+            flex: 1;
             display: flex;
             flex-wrap: wrap;
             // border: 1px solid #000;
@@ -987,8 +1008,10 @@ export default {
       }
     }
   }
+  
   .role-window {
-    width: 350px;
+    width: 374px;
+    height: 488px;
     position: fixed;
     top: 50%;
     left: 50%;
@@ -996,6 +1019,7 @@ export default {
     border: 1px solid #aaa;
     border-radius: 5px;
     background-color: #fff;
+    box-shadow: 8px 8px 5px 5px rgba(150, 150, 150, .6);
     .role-window-header {
       height: 40px;
       margin-bottom: 20px;
@@ -1018,15 +1042,24 @@ export default {
       }
     }
     .role-window-body {
+      // border: 1px solid #000;
+      height: 75%;
       text-align: center;
       .search {
-        width: 280px;
+        width: 288px;
         margin-bottom: 30px;
       }
-      .tree {
-        margin-left: 35px;
-        min-height: 280px;
+      .el-scrollbar{
+        width:88%;
+        height:80%;
+        margin-bottom: 20px;
+        // border: 1px solid #abe;
+        .tree {    
+          margin-left: 40px;
+          // min-height: 280px;
+        }
       }
+      
       .btn {
         margin-bottom: 20px;
         .el-button {
