@@ -7,6 +7,7 @@
     <h2>setup定义数据、方法(ref, reactive)</h2>
     {{ title }} <br />
     {{ userInfo }} <br />
+    {{ obj }} <br />
     <button @click="getInfo()">获取信息</button>
     <button @click="setInfo()">更新信息</button>
     <br />
@@ -45,11 +46,11 @@
   </div>
   <hr />
   <Search :msg="msg"></Search>
-  <hr>
+  <hr />
   <use-composition-api></use-composition-api>
 </template>
 <script>
-import { ref, reactive, toRefs, computed, provide } from "vue";
+import { ref, reactive, toRefs, computed, provide, toRaw } from "vue";
 import Search from "../components/search.vue";
 import UseCompositionApi from "../components/use-composition-api.vue";
 export default {
@@ -104,12 +105,28 @@ export default {
       type: "dog",
       aniName: "Tom",
     };
+    // originalObj和obj的关系
+    // 引用关系：obj是一个proxy对象，在Proxy对象中引用了originalObj
+    // 注意：如果直接修改originalObj，obj也会随之更新，但无法触发页面更新
+    // 只有通过包装之后的对象来修改，才会触发页面更新
+    let obj = reactive(originalObj);
+    // toRaw：获取reactive和ref的原始数据
+    // ref/reactive数据类型的特点:
+    // 每次修改都会被追踪，都会更新UI界面，但是这样其实是非常消耗性能的
+    // 所以如果我们有一些操作不需要追踪，不需要更新UI界面，
+    // 那么这个时候，我们就可以通过toRaw方法拿到它的原始数据，对原始数据进行修改
+    // 这样就不会被追踪，这样就不会更新UI界面，进而降低性能消耗
+
+    let originalObj2 = toRaw(obj);
+    console.log("toRaw:", originalObj === originalObj2);
+
     // readOnly将name变成只读模式
     // name = readonly(name);
 
     return {
       title,
       userInfo,
+      obj,
       getInfo,
       setInfo,
       // ...userInfo,  错误写法，失去响应式功能

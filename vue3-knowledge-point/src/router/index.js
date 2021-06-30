@@ -24,6 +24,11 @@ const routes = [
     path: '/composition',
     name: 'Composition',
     component: () => import('../views/composition.vue')
+  },
+  {
+    path: '/virtualList',
+    name: 'VirtualList',
+    component: () => import('../views/virtual-list.vue')
   }
 ]
 

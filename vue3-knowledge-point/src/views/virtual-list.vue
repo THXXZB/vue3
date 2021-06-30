@@ -7,59 +7,45 @@
     <p>
       原理：只渲染可视范围内的dom，通过复用超出可视范围的dom达到提高性能的目的
     </p>
-    <div class="scroll-box" :style="`height:${viewHeight}px`" @click="handleScroll($event)">
-      <ul>
-        <li v-for="(item, i) in cList" :key="i" :style="`height:${itemHeight}px`">{{item}}</li>
-      </ul>
-    </div>
+    <p>
+      核心：监听盒子(div.scroll-box)的滚动事件; <br />
+      计算出可视化高度一次能装几条数据，然后从list列表中截取；<br />
+      每次滚动后根据scrollTop值获取一个可以整除itemHeight的结果进行偏移
+    </p>
+    <p>
+      效果：div.scroll-box不断向下滚动的过程中，li也在不断向下平移(transfrom)，同时li也不断更新数据
+    </p>
+    <br />
+    <v-list :list="list"></v-list>
   </div>
 </template>
 <script>
+import VList from '@/components/v-list.vue'
 export default {
   data() {
     return {
-      viewHeight: 500,  //可视盒子的高度
-      list: [],  //总数据列表
-      cList: [],  // 可视范围的数据列表
-      itemHight: 50, // 每条数据所占的高度
-      scrollHeight: '',  // 虚拟列表的高度
-      showNum: '', //可视化范围内显示的数据量
-      offsetY: 0, // 动态偏移量
-      lastTime: new Date().getTime()  // 最新时间
+      list: [], //总数据列表
     };
   },
-  mounted() {
-    this.getList()
-    // 计算虚拟列表的长度
-    this.scrollHeight = this.list.length * this.itemHeight
-    // 计算可视区内显示的数据量, 多设置4个防止滚动时直接替换
-    this.showNum = Math.floor(this.viewHeight / this.itemHeight) + 4
-    // 计算默认展示列表
-    this.cList = this.list.slice(0, this.showNum)
-    console.log(this.scrollHeight, this.showNum, this.cList)
+  created() {
+    this.getList();
+  },
+  components: {
+    "v-list": VList
   },
   methods: {
-    handleScroll(e) {
-      // 减少滚动监听触发的次数
-      if (new Date().getTime() - this.lastTime > 10) {
-        // 记录滚动的高度
-        let scrollTop = e.target.scrollTop;
-        console.log(scrollTop)
-      }
-
-    },
     getList() {
       // lsit赋值
-      for (let i = 0; i < 1000; i++) {
-        this.list.push(i)
+      for (let i = 0; i < 100; i++) {
+        this.list.push(i);
       }
-    }
+    },
   },
 };
 </script>
-<style scoped>
+<style scoped lang="scss">
 /* 在css中使用data中的变量，eslint报错 */
-ul>li{
-
+p:nth-child(2n + 2) {
+  color: #6be;
 }
 </style>

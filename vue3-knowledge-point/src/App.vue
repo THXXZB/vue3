@@ -3,7 +3,8 @@
     <router-link to="/">Home</router-link> |
     <router-link to="/about">About</router-link> |
     <router-link to="/news">News</router-link> |
-    <router-link to="/composition">Composition Api</router-link>
+    <router-link to="/composition">Composition Api</router-link> |
+    <router-link to="/virtualList">Virtual List</router-link>
   </div>
   <router-view/>
 </template>
