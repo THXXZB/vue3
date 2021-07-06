@@ -29,6 +29,15 @@ const routes = [
     path: '/virtualList',
     name: 'VirtualList',
     component: () => import('../views/virtual-list.vue')
+  },
+  {
+    path: '/study',
+    name: 'Study',
+    component: () => import('../study/home.vue'),
+    children:[{
+      path: 'mainTab',
+      component: () => import('../study/main-tab.vue')
+    }]
   }
 ]
 

@@ -2,6 +2,9 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+
+import ElementPlus from 'element-plus';
+import 'element-plus/lib/theme-chalk/index.css';
 import axios from 'axios'
 import fetchJsonp from 'fetch-jsonp'
 import storage from './modules/storage'
@@ -17,5 +20,5 @@ app.config.globalProperties.FetchJsonp = fetchJsonp
 app.config.globalProperties.Storage = storage
 // 全局配置mixins
 app.mixin(basicMixin)
-app.use(store).use(router).mount('#app')
+app.use(store).use(router).use(ElementPlus).mount('#app')
 
