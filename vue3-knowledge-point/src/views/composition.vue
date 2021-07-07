@@ -48,13 +48,17 @@
   <Search :msg="msg"></Search>
   <hr />
   <use-composition-api></use-composition-api>
+  <hr>
+  <br>
+  <custom-ref></custom-ref>
 </template>
 <script>
 import { ref, reactive, toRefs, computed, provide, toRaw } from "vue";
 import Search from "../components/search.vue";
 import UseCompositionApi from "../components/use-composition-api.vue";
+import UseCustomRef from '../components/customRef.vue'
 export default {
-  components: { Search, "use-composition-api": UseCompositionApi },
+  components: { Search, "use-composition-api": UseCompositionApi , "custom-ref": UseCustomRef},
   name: "Composition",
   data() {
     return { msg: "composition中的msg" };
