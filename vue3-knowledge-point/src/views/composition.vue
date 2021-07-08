@@ -51,14 +51,22 @@
   <hr>
   <br>
   <custom-ref></custom-ref>
+  <hr>
+  <h3>ref 获取dom元素</h3>
+  <div ref="getDom">ref dom</div>
+  <hr>
+  <br>
+  <Readonly></Readonly>
 </template>
 <script>
-import { ref, reactive, toRefs, computed, provide, toRaw } from "vue";
+import { ref, reactive, toRefs, computed, provide, toRaw, onMounted } from "vue";
 import Search from "../components/search.vue";
 import UseCompositionApi from "../components/use-composition-api.vue";
 import UseCustomRef from '../components/customRef.vue'
+import Readonly from '../components/readonly.vue'
+
 export default {
-  components: { Search, "use-composition-api": UseCompositionApi , "custom-ref": UseCustomRef},
+  components: { Search, "use-composition-api": UseCompositionApi , "custom-ref": UseCustomRef, Readonly},
   name: "Composition",
   data() {
     return { msg: "composition中的msg" };
@@ -127,6 +135,11 @@ export default {
     // readOnly将name变成只读模式
     // name = readonly(name);
 
+    let getDom = ref(null)
+    // setup执行于create期间，而获取dom元素需要在mounted时才能获取
+    onMounted(() => {console.log('onmounted getDom:-------', getDom.value)})
+    console.log('getDom:---------', getDom.value)   // null
+
     return {
       title,
       userInfo,
@@ -140,6 +153,7 @@ export default {
       pass,
       originalObj,
       ...toRefs(dog), //* 解构后出现重名的变量会覆盖
+      getDom
     };
   },
   // provide传值的两种写法
