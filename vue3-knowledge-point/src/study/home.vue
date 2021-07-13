@@ -2,7 +2,8 @@
   <div id="study">
     <div id="nav">
       <router-link to="/study">Study</router-link> |
-      <router-link to="/study/mainTab">mainTab</router-link>
+      <router-link to="/study/mainTab">mainTab</router-link> |
+      <router-link to="/study/table">table</router-link>
     </div>
     <div>
       <h1 style="font-size: 30px">一站式需求管理平台 study</h1>
@@ -82,9 +83,6 @@ export default {
     },
     openOrClose() {
       this.open = !this.open
-    },
-    closeMsgBox() {
-
     }
   },
 };

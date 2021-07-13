@@ -37,6 +37,9 @@ const routes = [
     children:[{
       path: 'mainTab',
       component: () => import('../study/main-tab.vue')
+    },{
+      path: 'table',
+      component: () => import('../study/table.vue')
     }]
   }
 ]

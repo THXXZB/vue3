@@ -22,10 +22,12 @@
         </el-scrollbar>
       </el-tab-pane>
     </el-tabs>
+    <test-emit @homeEmit="homeData()" ></test-emit>
   </div>
 </template>
 <script>
-import AsyncComponent from '../study/components/async-component.vue'
+import AsyncComponent from './components/async-component.vue'
+import TestEmit from './components/test-emit.vue'
 export default {
   data() {
     return {
@@ -56,7 +58,14 @@ export default {
   },
   components: {
     'async-com': AsyncComponent,
+    'test-emit': TestEmit
+  },
+  methods: {
+    homeData() {
+      console.log("home data activeTab", this.activeTab);
+    },
   }
+  
 };
 </script>
 <style scoped>
