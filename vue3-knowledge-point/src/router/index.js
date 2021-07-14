@@ -40,6 +40,9 @@ const routes = [
     },{
       path: 'table',
       component: () => import('../study/table.vue')
+    },{
+      path: 'iframe',
+      component: () => import('../study/iframe.vue')
     }]
   }
 ]

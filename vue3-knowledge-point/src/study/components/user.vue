@@ -1,11 +1,11 @@
 <template>
-  <div>
-    user page
-    <p>count: {{ count }}</p>
-    <button @click="updateCount()">update count</button>
-  </div>
+  <!-- <div class="all-page">
+
+  </div> -->
+  <Table></Table>
 </template>
 <script>
+import Table from './table.vue';
 import { ref } from "vue";
 export default {
   setup() {
@@ -16,6 +16,9 @@ export default {
       updateCount,
     };
   },
+  components: {
+    Table
+  }
 };
 function countHandler() {
   let count = ref(1);
@@ -26,3 +29,9 @@ function countHandler() {
   return { count, updateCount };
 }
 </script>
+<style lang="scss">
+  .all-page{
+    height: 600px;
+    width: 100%;
+  }
+</style>

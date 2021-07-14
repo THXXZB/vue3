@@ -3,7 +3,8 @@
     <div id="nav">
       <router-link to="/study">Study</router-link> |
       <router-link to="/study/mainTab">mainTab</router-link> |
-      <router-link to="/study/table">table</router-link>
+      <router-link to="/study/table">table</router-link> |
+      <router-link to="/study/iframe">iframe</router-link>
     </div>
     <div>
       <h1 style="font-size: 30px">一站式需求管理平台 study</h1>

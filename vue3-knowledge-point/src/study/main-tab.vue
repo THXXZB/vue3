@@ -9,25 +9,21 @@
         :name="item.name"
         class="tab-container"
       >
-        <el-scrollbar>
-          <async-com
-          :path="item.path"
-          :name="item.name"
-          >
-
-          </async-com>
-          <!-- <div class="content">
-            {{ item.label }}
-          </div> -->
-        </el-scrollbar>
+        <template #label>
+          <span><i class="el-icon-date"></i>{{item.label}}</span>
+        </template>
+        <async-com :path="item.path" :name="item.name"> </async-com>
+        <!-- <el-scrollbar>
+          
+        </el-scrollbar> -->
       </el-tab-pane>
     </el-tabs>
-    <test-emit @homeEmit="homeData()" ></test-emit>
+    <test-emit @homeEmit="homeData()"></test-emit>
   </div>
 </template>
 <script>
-import AsyncComponent from './components/async-component.vue'
-import TestEmit from './components/test-emit.vue'
+import AsyncComponent from "./components/async-component.vue";
+import TestEmit from "./components/test-emit.vue";
 export default {
   data() {
     return {
@@ -36,36 +32,35 @@ export default {
         {
           name: "1",
           label: "用户管理",
-          path: 'components/user'
+          path: "components/user",
         },
         {
           name: "2",
           label: "配置管理",
-          path: 'components/config'
+          path: "components/config",
         },
         {
           name: "3",
           label: "角色管理",
-          path: 'components/role'
+          path: "components/role",
         },
         {
           name: "4",
           label: "定时任务补偿",
-          path: 'components/task'
+          path: "components/task",
         },
       ],
     };
   },
   components: {
-    'async-com': AsyncComponent,
-    'test-emit': TestEmit
+    "async-com": AsyncComponent,
+    "test-emit": TestEmit,
   },
   methods: {
     homeData() {
       console.log("home data activeTab", this.activeTab);
     },
-  }
-  
+  },
 };
 </script>
 <style scoped>
@@ -79,7 +74,7 @@ export default {
   border: 1px solid #abe;
   text-align: center;
 }
-.main-tab >>> .el-tabs__content{
+.main-tab >>> .el-tabs__content {
   border: 2px solid #f40;
   height: 300px;
 }
@@ -87,7 +82,7 @@ export default {
   height: calc(100% - 4px);
   border: 2px solid #000;
 }
-.tab-container .content{
+.tab-container .content {
   height: 500px;
   background: rgb(190, 228, 52);
   border: 5px solid #abe;
