@@ -12,17 +12,15 @@
         <template #label>
           <span><i class="el-icon-date"></i>{{item.label}}</span>
         </template>
-        <async-com :path="item.path" :name="item.name"> </async-com>
-        <!-- <el-scrollbar>
-          
-        </el-scrollbar> -->
+        <!-- 见 iframe.vue   <async-com :path="item.path" :name="item.name"> </async-com> -->
+        {{item.label}}
       </el-tab-pane>
     </el-tabs>
     <test-emit @homeEmit="homeData()"></test-emit>
   </div>
 </template>
 <script>
-import AsyncComponent from "./components/async-component.vue";
+// import AsyncComponent from "./components/async-component.vue";
 import TestEmit from "./components/test-emit.vue";
 export default {
   data() {
@@ -53,7 +51,7 @@ export default {
     };
   },
   components: {
-    "async-com": AsyncComponent,
+    // "async-com": AsyncComponent,
     "test-emit": TestEmit,
   },
   methods: {

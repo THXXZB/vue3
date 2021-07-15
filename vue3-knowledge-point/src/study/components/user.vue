@@ -1,33 +1,28 @@
 <template>
-  <!-- <div class="all-page">
-
-  </div> -->
-  <Table></Table>
+<!-- 全部 -->
+  <Table :tableData="tableData"></Table>
 </template>
 <script>
 import Table from './table.vue';
-import { ref } from "vue";
+// import { ref } from "vue";
 export default {
-  setup() {
-    let { count, updateCount } = countHandler();
-
-    return {
-      count,
-      updateCount,
-    };
+  props: {
+    tableData: {
+      type: Array,
+      default: () => []
+    }
   },
+  // setup(prop) {
+  //   console.log('user prop tableData', prop.tableData)
+  //   let userTableData = prop.tableData.filter(item => item.type === '请假')
+  //   return {
+
+  //   };
+  // },
   components: {
     Table
   }
 };
-function countHandler() {
-  let count = ref(1);
-  let updateCount = () => {
-
-    count.value++;
-  };
-  return { count, updateCount };
-}
 </script>
 <style lang="scss">
   .all-page{

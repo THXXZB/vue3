@@ -1,5 +1,5 @@
 <template>
-  <component :is="asyncComponent">
+  <component :is="asyncComponent" :tableData="data">
     
   </component>
 </template>
@@ -20,6 +20,11 @@ export default {
       type: Number,
       default: 5000,
     },
+    // 表格数据
+    data: {
+      typep: Array,
+      default: () => []
+    }
   },
   data() {
     return {

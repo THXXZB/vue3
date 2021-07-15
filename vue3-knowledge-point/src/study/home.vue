@@ -51,7 +51,7 @@ export default {
   data() {
     return {
       who: "componentB",
-      path: "components/user",
+      path: "components/componentB",
       asyncComponent: "",
       open: false
     };
@@ -73,11 +73,11 @@ export default {
       console.log(typeof this.who, this.who);
     },
     changeComponent2() {
-      if (this.path == "components/user") {
-        this.path = "components/role";
+      if (this.path == "components/componentB") {
+        this.path = "components/componentA";
         this.asyncComponent = factory(this.path);
       } else {
-        this.path = "components/user";
+        this.path = "components/componentB";
       }
       console.log(typeof this.path, this.path);
       this.asyncComponent = factory(this.path);
