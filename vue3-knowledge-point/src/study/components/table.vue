@@ -1,9 +1,12 @@
 <template>
   <div class="table">
-    <el-table :data="tableData" style="width: 100%; margin: 0 auto">
+    <!-- {{tableData}} <br>
+    {{name}} -->
+    <el-table :data="tableData" style="width: 100%; margin: 0 auto; border: 1px solid #f40">
       <el-table-column label="操作" width="124">
         <template #default="scope">
-          <div class="operation" v-show="scope.row.state !== '已审批'">
+          <div class="operation" v-show="(scope.row.state !== '已审批') && (scope.row.verifier.indexOf('蔡文姬') !== -1)">
+            
             <div class="icon icon1"><img src="http://10.1.51.218:7505/DZHL/assets/%E4%BF%A1%E6%81%AF%E8%AF%A6%E6%9F%A5@2x.png" alt=""></div>
             <div class="icon icon2"><img src="http://10.1.51.218:7505/DZHL/assets/%E4%BA%BA%E5%91%98%E6%A1%A3%E6%A1%88@2x.png" alt=""></div>
             <div class="icon icon3"><img src="http://10.1.51.218:7505/DZHL/assets/%E5%AE%A1%E6%89%B9%E7%9B%96%E7%AB%A0@2x.png" alt=""></div>
@@ -24,11 +27,15 @@ export default {
     tableData: {
       type: Array,
       default: () => []
+    },
+    name: {
+      type: String,
+      default: 'defaul'
     }
   },
   data() {
     return {
-      
+      userName: '蔡文姬'
     };
   },
 };

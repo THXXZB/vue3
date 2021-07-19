@@ -1,6 +1,6 @@
 <template>
-<!-- 转科 -->
-  <Table :tableData="consultationTableData"></Table>
+<!-- 会诊 -->
+  <Table :tableData="consultationTableData" :name='name'></Table>
 </template>
 <script>
 import Table from './table.vue';
@@ -10,6 +10,11 @@ export default {
     tableData: {
       type: Array,
       default: () => []
+    }
+  },
+  data() {
+    return {
+      name: '会诊'
     }
   },
   setup(prop) {

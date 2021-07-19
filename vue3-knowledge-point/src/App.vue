@@ -5,6 +5,7 @@
     <router-link to="/news">News</router-link> |
     <router-link to="/composition">Composition Api</router-link> |
     <router-link to="/virtualList">Virtual List</router-link> |
+    <router-link to="/dragList">drag List</router-link> |
     <router-link to="/study">KTstudy</router-link>
   </div>
   <el-button>dfladjlsfjaldsfjdsl</el-button>

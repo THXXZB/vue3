@@ -1,4 +1,5 @@
 <template>
+<!-- {{path}} -->
   <component :is="asyncComponent" :tableData="data">
     
   </component>
@@ -30,6 +31,9 @@ export default {
     return {
       asyncComponent: factory(this.path, this.delay, this.timeout),
     };
+  },
+  mounted() {
+    console.log('跳转到：', this.path)
   },
   
 };

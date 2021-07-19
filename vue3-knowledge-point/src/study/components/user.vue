@@ -1,6 +1,6 @@
 <template>
 <!-- 全部 -->
-  <Table :tableData="tableData"></Table>
+  <Table :tableData="tableData" :name="name"></Table>
 </template>
 <script>
 import Table from './table.vue';
@@ -10,6 +10,11 @@ export default {
     tableData: {
       type: Array,
       default: () => []
+    }
+  },
+  data() {
+    return{
+      name: 'all'
     }
   },
   // setup(prop) {

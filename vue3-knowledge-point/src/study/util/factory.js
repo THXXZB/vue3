@@ -1,7 +1,7 @@
 import { defineAsyncComponent } from 'vue'
 
 export default (path, delay = 2000, timeout = 5000) => {
-	console.log(`../${path}`)
+	console.log(`path------------------:../${path}`)
 	return defineAsyncComponent({
 		// 需要加载的组件 (应该是一个 `Promise` 对象)
 		loader: () => import(`../${path}`),

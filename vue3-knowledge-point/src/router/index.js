@@ -31,6 +31,11 @@ const routes = [
     component: () => import('../views/virtual-list.vue')
   },
   {
+    path: '/dragList',
+    name: 'DragList',
+    component: () => import('../views/drag-list.vue')
+  },
+  {
     path: '/study',
     name: 'Study',
     component: () => import('../study/home.vue'),

@@ -1,6 +1,8 @@
 <template>
 <!-- 转科 -->
-  <Table :tableData="majorTableData"></Table>
+  <div>
+    <Table :tableData="majorTableData" :name="name"></Table>
+  </div>
 </template>
 <script>
 import Table from './table.vue';
@@ -12,15 +14,25 @@ export default {
       default: () => []
     }
   },
+  
   setup(prop) {
     let majorTableData = reactive([])
     majorTableData = prop.tableData.filter(item => item.type === '转科')
+    console.log('-------------------majorData', majorTableData)
     return {
       majorTableData
     };
   },
+  data() {
+    return {
+      name: 'mojor'
+    }
+  },
   components: {
     Table
-  }
+  },
+  // mounted() {
+  //   this.majorTableData = this.tableData.filter(item => item.type === '转科')
+  // },
 };
 </script>
