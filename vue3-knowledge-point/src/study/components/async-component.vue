@@ -1,5 +1,5 @@
 <template>
-  <component :is="asyncComponent" :tableData="data">
+  <component :is="asyncComponent" v-bind="$attrs">
   </component>
 </template>
 <script>
@@ -19,11 +19,6 @@ export default {
       type: Number,
       default: 5000,
     },
-    // 表格数据
-    data: {
-      typep: Array,
-      default: () => []
-    }
   },
   data() {
     return {

@@ -1,7 +1,7 @@
 <template>
   <div class="table">
     <!-- {{tableData}} <br>
-    {{name}} -->
+    {{type}} -->
     <el-table :data="tableData" style="width: 100%; margin: 0 auto; border: 1px solid #f40">
       <el-table-column label="操作" width="124">
         <template #default="scope">
@@ -28,15 +28,20 @@ export default {
       type: Array,
       default: () => []
     },
-    name: {
+    type: {
       type: String,
-      default: 'defaul'
+      default: '全部'
     }
   },
   data() {
     return {
-      userName: '蔡文姬'
+      userName: '蔡文姬',
+      data: []
     };
+  },
+  mounted() {
+    this.data = this.tableData
+    this.data = this.data.filter(item => item.type === this.type)
   },
 };
 </script>

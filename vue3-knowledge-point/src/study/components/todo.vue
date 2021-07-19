@@ -36,9 +36,9 @@
           <!-- 右内容页 -->
           <el-scrollbar style="height: 100%">
             <async-com
-              :path="item.path"
-              :name="item.id"
-              :data="data"
+              path="components/table"
+              :type="item.label"
+              :tableData="tableData"
               :key="componentKey"
             >
             </async-com>
@@ -153,7 +153,7 @@ export default {
         },
       ],
       // 表格内容
-      data: [
+      tableData: [
         {
           id: 1,
           state: "待护理部审批",
