@@ -376,7 +376,7 @@ export default {
   },
 };
 </script>
-<style lang="scss">
+<style lang="scss" scope>
 .todo-list {
   border: 1px solid #f40;
   height: 600px;

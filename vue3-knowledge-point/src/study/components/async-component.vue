@@ -1,7 +1,5 @@
 <template>
-<!-- {{path}} -->
   <component :is="asyncComponent" :tableData="data">
-    
   </component>
 </template>
 <script>

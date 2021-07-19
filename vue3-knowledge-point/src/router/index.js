@@ -48,6 +48,9 @@ const routes = [
     },{
       path: 'iframe',
       component: () => import('../study/iframe.vue')
+    },{
+      path: 'nurseTeam',
+      component: () => import('../study/nurse-team.vue')
     }]
   }
 ]
