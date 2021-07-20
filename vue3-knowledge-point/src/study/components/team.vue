@@ -33,19 +33,24 @@ import { computed } from 'vue';
             <div class="team" v-for="(item, index) in teamList" :key="index">
               <div class="team_header">
                 <el-row class="row-bg" justify="space-between">
-                  <el-col :span="1" @click="item.expand = !item.expand">图标</el-col>
-                  <el-col :span="5" ><div class="tag" v-show="item.manageBed">管床</div></el-col>
-                  <el-col :span="12">{{ item.teamName }}</el-col>
-                  <el-col :span="3">编辑</el-col>
+                  <el-col :span="2" @click="item.expand = !item.expand"
+                    >图标</el-col
+                  >
+                  <!-- <el-col :span="5" ><div class="tag" v-show="item.manageBed">管床</div></el-col> -->
+                  <el-col :span="16">{{ item.teamName }}</el-col>
+                  <el-col :span="3" @click="showEditTeam = !showEditTeam"
+                    >编辑</el-col
+                  >
                   <el-col :span="3">删除</el-col>
                 </el-row>
               </div>
               <div class="team_body">
                 <el-collapse-transition>
                   <div class="team_body" v-show="item.expand">
-                    <el-row class="row-bg" justify="space-between">
+                    <el-row justify="space-between">
+                      <el-col :span="1">+</el-col>
                       <el-col :span="4">人员:</el-col>
-                      <el-col :span="20">
+                      <el-col :span="19">
                         <div class="member-grouped">
                           <div
                             class="mem-box"
@@ -59,9 +64,10 @@ import { computed } from 'vue';
                         </div>
                       </el-col>
                     </el-row>
-                    <el-row class="row-bg" justify="space-between">
+                    <el-row justify="space-between">
+                      <el-col :span="1">+</el-col>
                       <el-col :span="4">床位:</el-col>
-                      <el-col :span="20">
+                      <el-col :span="19">
                         <div class="bed-grouped">
                           <div
                             class="bed-box"
@@ -84,7 +90,7 @@ import { computed } from 'vue';
         <el-col :span="8">
           <div class="no-group">
             <div class="member">
-              <div class="member_header">未分组人员</div>
+              <div class="member__header">未分组人员</div>
               <div class="member_body">
                 <div
                   class="mem-box"
@@ -114,12 +120,82 @@ import { computed } from 'vue';
         </el-col>
       </el-row>
     </el-main>
+    <el-dialog title="责任组编辑" v-model="showEditTeam" width="70%">
+      <div class="teamName">
+        <i>*</i><span>责任组名称：</span
+        ><el-input placeholder="请输入内容" v-model="editName"></el-input>
+      </div>
+      <div class="grouped">
+        <div class="member">
+          <div class="member__header">责任组成员</div>
+          <div class="member__body">
+            <div
+              class="mem-box"
+              v-for="(item, index) in editTeamMemberList"
+              :key="index"
+            >
+              {{ item.name }}{{item.code}}
+            </div>
+          </div>
+        </div>
+        <div class="bed">
+          <div class="bed__header">责任组床位</div>
+          <div class="bed__body">
+            <div
+              class="bed-box"
+              v-for="(item, index) in editTeamBedList"
+              :key="index"
+            >
+              {{ item.code }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="no-group">
+        <div class="member">
+          <div class="member__header">未分组成员</div>
+          <div class="member__body">
+            <div
+              class="mem-box"
+              v-for="(item, index) in noGroupMemberList"
+              :key="index"
+            >
+              {{ item.name }}{{item.code}}
+            </div>
+          </div>
+        </div>
+        <div class="bed">
+          <div class="bed__header">未分组床位</div>
+          <div class="bed__body">
+            <div
+              class="bed-box"
+              v-for="(item, index) in noGroupBedList"
+              :key="index"
+            >
+              {{ item.code }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="showEditTeam = false">取 消</el-button>
+          <el-button type="primary" @click="saveEditTeam"
+            >确 定</el-button
+          >
+        </span>
+      </template>
+    </el-dialog>
   </el-container>
 </template>
 <script>
 export default {
   data() {
     return {
+      showEditTeam: true, // 护理小组编辑弹窗
+      editTeamName: "",
+      editTeamMemberList: [],
+      editTeamBedList: [],
       teamList: [
         //小组列表
         {
@@ -354,6 +430,7 @@ export default {
           label: "北京烤鸭",
         },
       ],
+      // 当前护理单元
       currentNurseUnit: "",
     };
   },
@@ -364,6 +441,11 @@ export default {
     noGroupBedList() {
       return this.bedList.filter((item) => !item.grouped);
     },
+  },
+  methods: {
+    saveEditTeam() {
+      this.showEditTeam = false
+    }
   },
 };
 </script>
@@ -411,7 +493,7 @@ export default {
     .member,
     .bed {
       height: 200px;
-      .member_header,
+      .member__header,
       .bed_header {
         background-color: #eee;
       }
@@ -422,13 +504,66 @@ export default {
       }
     }
   }
-  .mem-box {
-    border: 1px solid #409eff;
-    margin-right: 10px;
+}
+.el-overlay {
+  .el-dialog {
+    height: 70%;
+    display: flex;
+    flex-direction: column;
+    .el-dialog__header {
+      text-align: left;
+      height: 40px;
+    }
+    .el-dialog__body {
+      flex: 1;
+      // border: 1px solid #abe;
+      padding: 10px 20px;
+      .teamName {
+        height: 40px;
+        display: flex;
+        .el-input {
+          width: 80%;
+        }
+      }
+      .grouped,
+      .no-group {
+        height: 45%;
+        display: flex;
+        // border: 1px solid #f3f;
+      }
+      .member,
+      .bed {
+        width: calc(50% - 10px);
+        height: 100%;
+        border: 1px solid #409eff;
+        .member__header,
+        .bed__header {
+          text-align: left;
+        }
+        .member__body,
+        .bed__body {
+          display: flex;
+          .mem-box,
+          .bed-box {
+          }
+        }
+      }
+      .bed {
+        margin-left: 20px;
+      }
+    }
+    .el-dialog__footer {
+      height: 40px;
+      padding: 0;
+    }
   }
-  .bed-box {
-    border: 1px solid #67c23a;
-    margin-right: 10px;
-  }
+}
+.mem-box {
+  border: 1px solid #409eff;
+  margin-right: 10px;
+}
+.bed-box {
+  border: 1px solid #67c23a;
+  margin-right: 10px;
 }
 </style>
