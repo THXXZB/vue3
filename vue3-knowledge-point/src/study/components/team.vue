@@ -1,29 +1,26 @@
-import { computed } from 'vue';
 <template>
   <el-container>
     <el-header>
-      <el-row>
-        <el-col :span="2"><el-button>新增</el-button></el-col>
-        <el-col :span="4"
-          ><el-input placeholder="请输入内容" v-model="input4">
-            <template #prefix>
-              <i class="el-input__icon el-icon-search"></i>
-            </template> </el-input
-        ></el-col>
-        <el-col :span="6" :offset="12"
-          ><div class="select-unit">
-            <span>护理单元：</span
-            ><el-select v-model="currentNurseUnit" placeholder="请选择">
-              <el-option
-                v-for="item in nurseUnit"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              >
-              </el-option>
-            </el-select></div
-        ></el-col>
-      </el-row>
+      <el-button class="add" @click="editTeam">新增</el-button>
+      <div class="input-box">
+        <el-input placeholder="请输入内容" v-model="input4">
+          <template #append>
+            <el-button icon="el-icon-search"></el-button>
+          </template>
+        </el-input>
+      </div>
+      <div class="select-unit">
+        <span>护理单元：</span>
+        <el-select v-model="currentNurseUnit" placeholder="请选择">
+          <el-option
+            v-for="item in nurseUnit"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
+      </div>
     </el-header>
     <el-main>
       <el-row>
@@ -33,24 +30,45 @@ import { computed } from 'vue';
             <div class="team" v-for="(item, index) in teamList" :key="index">
               <div class="team_header">
                 <el-row class="row-bg" justify="space-between">
-                  <el-col :span="2" @click="item.expand = !item.expand"
-                    >图标</el-col
-                  >
+                  <el-col :span="1" @click="item.expand = !item.expand"
+                    ><img
+                      :src="item.expand ? expandIconUrl : noExpandIconUrl"
+                      alt=""
+                      class="expand"
+                  /></el-col>
                   <!-- <el-col :span="5" ><div class="tag" v-show="item.manageBed">管床</div></el-col> -->
-                  <el-col :span="16">{{ item.teamName }}</el-col>
-                  <el-col :span="3" @click="showEditTeam = !showEditTeam"
-                    >编辑</el-col
-                  >
-                  <el-col :span="3">删除</el-col>
+                  <el-col :span="21">
+                    <div class="text">{{ item.teamName }}</div>
+                  </el-col>
+                  <el-col :span="1" @click="editTeam(item)"
+                    ><div class="edit">
+                      <img
+                        src="http://10.1.51.218:7505/DZHL/assets/%E7%BC%96%E8%BE%910@2x.png"
+                        alt=""
+                      /></div
+                  ></el-col>
+                  <el-col :span="1"
+                    ><div class="delete">
+                      <img
+                        src="http://10.1.51.218:7505/DZHL/assets/%E5%88%A0%E9%99%A4@2x.png"
+                        alt=""
+                      /></div
+                  ></el-col>
                 </el-row>
               </div>
               <div class="team_body">
                 <el-collapse-transition>
-                  <div class="team_body" v-show="item.expand">
+                  <div v-show="item.expand">
                     <el-row justify="space-between">
-                      <el-col :span="1">+</el-col>
-                      <el-col :span="4">人员:</el-col>
-                      <el-col :span="19">
+                      <el-col :span="1"
+                        ><div class="add">
+                          <img
+                            src="http://10.1.51.218:7505/DZHL/assets/%E6%96%B0%E5%BB%BA@2x.png"
+                            alt=""
+                          /></div
+                      ></el-col>
+                      <el-col :span="2"><div class="text">人员：</div></el-col>
+                      <el-col :span="21">
                         <div class="member-grouped">
                           <div
                             class="mem-box"
@@ -59,15 +77,24 @@ import { computed } from 'vue';
                           >
                             <span>{{ member.name }}</span>
                             <span>{{ member.code }}</span>
-                            <i>+</i>
+                            <img
+                              src="http://10.1.51.218:7505/DZHL/assets/%E5%85%B3%E9%97%AD01@2x.png"
+                              alt=""
+                            />
                           </div>
                         </div>
                       </el-col>
                     </el-row>
                     <el-row justify="space-between">
-                      <el-col :span="1">+</el-col>
-                      <el-col :span="4">床位:</el-col>
-                      <el-col :span="19">
+                      <el-col :span="1"
+                        ><div class="add">
+                          <img
+                            src="http://10.1.51.218:7505/DZHL/assets/%E6%96%B0%E5%BB%BA@2x.png"
+                            alt=""
+                          /></div
+                      ></el-col>
+                      <el-col :span="2"><div class="text">床位：</div></el-col>
+                      <el-col :span="21">
                         <div class="bed-grouped">
                           <div
                             class="bed-box"
@@ -75,7 +102,10 @@ import { computed } from 'vue';
                             :key="bed.id"
                           >
                             <span>{{ bed.code }}</span>
-                            <i>+</i>
+                            <img
+                              src="http://10.1.51.218:7505/DZHL/assets/%E5%85%B3%E9%97%AD01@2x.png"
+                              alt=""
+                            />
                           </div>
                         </div>
                       </el-col>
@@ -99,7 +129,10 @@ import { computed } from 'vue';
                 >
                   <span>{{ item.name }}</span
                   ><span>{{ item.code }}</span
-                  ><i>+</i>
+                  ><img
+                    src="http://10.1.51.218:7505/DZHL/assets/%E6%96%B0%E5%BB%BA01@2x.png"
+                    alt=""
+                  />
                 </div>
               </div>
             </div>
@@ -112,7 +145,10 @@ import { computed } from 'vue';
                   :key="item.id"
                 >
                   <span>{{ item.code }}</span
-                  ><i>+</i>
+                  ><img
+                    src="http://10.1.51.218:7505/DZHL/assets/%E6%96%B0%E5%BB%BA01@2x.png"
+                    alt=""
+                  />
                 </div>
               </div>
             </div>
@@ -120,10 +156,11 @@ import { computed } from 'vue';
         </el-col>
       </el-row>
     </el-main>
+    <!-- 编辑小组弹窗 -->
     <el-dialog title="责任组编辑" v-model="showEditTeam" width="70%">
       <div class="teamName">
         <i>*</i><span>责任组名称：</span
-        ><el-input placeholder="请输入内容" v-model="editName"></el-input>
+        ><el-input placeholder="请输入内容" v-model="editTeamName"></el-input>
       </div>
       <div class="grouped">
         <div class="member">
@@ -134,7 +171,9 @@ import { computed } from 'vue';
               v-for="(item, index) in editTeamMemberList"
               :key="index"
             >
-              {{ item.name }}{{item.code}}
+              <span>{{ item.name }}</span
+              ><span>{{ item.code }}</span
+              ><i> X</i>
             </div>
           </div>
         </div>
@@ -146,7 +185,8 @@ import { computed } from 'vue';
               v-for="(item, index) in editTeamBedList"
               :key="index"
             >
-              {{ item.code }}
+              <span>{{ item.code }}</span
+              ><span> X</span>
             </div>
           </div>
         </div>
@@ -160,7 +200,9 @@ import { computed } from 'vue';
               v-for="(item, index) in noGroupMemberList"
               :key="index"
             >
-              {{ item.name }}{{item.code}}
+              <span>{{ item.name }}</span
+              ><span>{{ item.code }}</span
+              ><i>+</i>
             </div>
           </div>
         </div>
@@ -180,9 +222,7 @@ import { computed } from 'vue';
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="showEditTeam = false">取 消</el-button>
-          <el-button type="primary" @click="saveEditTeam"
-            >确 定</el-button
-          >
+          <el-button type="primary" @click="saveEditTeam">确 定</el-button>
         </span>
       </template>
     </el-dialog>
@@ -192,10 +232,10 @@ import { computed } from 'vue';
 export default {
   data() {
     return {
-      showEditTeam: true, // 护理小组编辑弹窗
-      editTeamName: "",
-      editTeamMemberList: [],
-      editTeamBedList: [],
+      showEditTeam: false, // 护理小组编辑弹窗
+      editTeamName: "", // 当前编辑小组的名称
+      editTeamMemberList: [], //当前编辑小组的人员列表
+      editTeamBedList: [], //当前编辑小组的床位列表
       teamList: [
         //小组列表
         {
@@ -234,7 +274,7 @@ export default {
           id: 2,
           teamName: "责任组2",
           manageBed: false,
-          expand: true,
+          expand: false,
           memberList: [
             {
               id: 4,
@@ -296,7 +336,7 @@ export default {
         },
       ],
       memberList: [
-        // 人员列表
+        // 人员总列表
         {
           id: 1,
           code: "N1",
@@ -363,9 +403,33 @@ export default {
           name: "卢芳成",
           grouped: false,
         },
+        {
+          id: 12,
+          code: "N12",
+          name: "张中来",
+          grouped: false,
+        },
+        {
+          id: 13,
+          code: "N13",
+          name: "林媛媛",
+          grouped: false,
+        },
+        {
+          id: 14,
+          code: "N14",
+          name: "赵欣欣",
+          grouped: false,
+        },
+        {
+          id: 15,
+          code: "N15",
+          name: "周少宇",
+          grouped: false,
+        },
       ],
       bedList: [
-        // 床位列表
+        // 床位总列表
         {
           id: 1,
           code: "01",
@@ -406,6 +470,31 @@ export default {
           code: "08",
           grouped: false,
         },
+        {
+          id: 9,
+          code: "09",
+          grouped: false,
+        },
+        {
+          id: 10,
+          code: "10",
+          grouped: false,
+        },
+        {
+          id: 11,
+          code: "11",
+          grouped: false,
+        },
+        {
+          id: 12,
+          code: "12",
+          grouped: false,
+        },
+        {
+          id: 13,
+          code: "13",
+          grouped: false,
+        },
       ],
       nurseUnit: [
         // 护理单元列表
@@ -432,31 +521,109 @@ export default {
       ],
       // 当前护理单元
       currentNurseUnit: "",
+      expandIconUrl:
+        "http://10.1.51.218:7505/DZHL/assets/%E4%B8%89%E8%A7%92%E5%B1%95%E5%BC%80@2x.png",
+      noExpandIconUrl:
+        "http://10.1.51.218:7505/DZHL/assets/%E4%B8%89%E8%A7%92%E6%94%B6%E8%B5%B7@2x.png",
     };
   },
   computed: {
+    // 未分组人员列表
     noGroupMemberList() {
       return this.memberList.filter((item) => !item.grouped);
     },
+    // 未分组床位列表
     noGroupBedList() {
       return this.bedList.filter((item) => !item.grouped);
     },
   },
   methods: {
+    // 编辑小组
+    editTeam(team) {
+      this.showEditTeam = true;
+      if (team) {
+        this.editTeamName = team.teamName;
+        this.editTeamMemberList = team.memberList;
+        this.editTeamBedList = team.bedList;
+      }
+    },
+    // 保存编辑小组
     saveEditTeam() {
-      this.showEditTeam = false
-    }
+      this.showEditTeam = false;
+    },
   },
 };
 </script>
 <style lang="scss" scope>
 .el-header {
-  border: 1px solid #abe;
-  height: 44px !important;
+  // border: 1px solid #abe;
+  height: 30px !important;
   margin-bottom: 10px;
-  .el-row {
-    .el-col {
-      .select-unit {
+  padding: 0;
+  display: flex;
+  .add {
+    width: 56px;
+    height: 28px;
+    min-height: 28px;
+    padding: 0;
+    background: rgba(51, 144, 248, 0.1);
+    border: 1px solid rgba(51, 144, 248, 0.3);
+    border-radius: 4px;
+    span {
+      font-family: MicrosoftYaHei;
+      font-size: 13px;
+      color: #3390f8;
+      line-height: 28px;
+    }
+  }
+  .input-box {
+    flex: 1;
+    text-align: left;
+    margin-left: 15px;
+    .el-input-group {
+      // flex: 1;
+      width: 360px;
+      height: 30px;
+      .el-input__inner {
+        width: 320px;
+        height: 100%;
+        box-shadow: 0 2px 4px 0 rgba(51, 144, 248, 0.1);
+      }
+      .el-input-group__append {
+        width: 40px;
+        height: 100%;
+        padding: 0;
+        background-color: #3390f8;
+        border-radius: 0 4px 4px 0;
+        .el-button {
+          color: #fff;
+          margin-left: -8px;
+        }
+      }
+    }
+  }
+  .select-unit {
+    width: 210px;
+    span {
+      font-family: MicrosoftYaHei;
+      font-size: 13px;
+      color: #666666;
+      line-height: 21px;
+    }
+    .el-select {
+      width: 140px;
+      height: 28px;
+      line-height: 28px;
+      .select-trigger {
+        // height: 100%;
+        .el-input {
+          .el-input__inner {
+            height: 28px;
+          }
+          .el-input__suffix {
+            top: -5px;
+          }
+        }
       }
     }
   }
@@ -464,24 +631,89 @@ export default {
 .el-main {
   padding: 0;
   .grouped {
+    min-width: 740px;
     .team {
       margin-bottom: 20px;
+      background: #ffffff;
+      border: 1px solid #eeeeee;
+      box-shadow: 0 2px 4px 0 rgba(51, 144, 248, 0.1);
+      border-radius: 5px;
       .team_header {
-        background-color: #eee;
+        height: 29px;
+        line-height: 29px;
+        background: #f5f7fa;
+        border-radius: 5px 5px 0 0;
         .el-row {
           .el-col {
-            border: 1px solid rgb(169, 216, 115);
+            .expand {
+              width: 8px;
+              height: 8px;
+            }
+            .text {
+              font-family: MicrosoftYaHei-Bold;
+              font-size: 12px;
+              color: #333333;
+              text-align: left;
+              margin-left: 30px;
+            }
+            .edit,
+            .delete {
+              width: 20px;
+              height: 20px;
+              margin-top: 4.5px;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              border-radius: 4px;
+              img {
+                width: 14px;
+                height: 14px;
+              }
+            }
+            .edit {
+              background: rgba(230, 162, 60, 0.8);
+            }
+            .delete {
+              background: rgba(245, 108, 108, 0.8);
+            }
           }
         }
       }
       .team_body {
         .el-row {
+          // height: 36px;
           .el-col {
-            border: 1px solid rgb(45, 105, 155);
+            border-bottom: 1px solid #f5f7fa;
+            .add {
+              width: 20px;
+              height: 20px;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              background: rgba(51, 144, 248, 0.8);
+              border-radius: 4px;
+              margin: 8px auto;
+              img {
+                width: 14px;
+                height: 14px;
+              }
+            }
+            .text {
+              line-height: 36px;
+              text-align: right;
+              font-family: MicrosoftYaHei;
+              font-size: 12px;
+              color: #333333;
+            }
             .member-grouped,
             .bed-grouped {
               display: flex;
-              padding: 5px 10px;
+              flex-wrap: wrap;
+              padding: 7px 10px 0;
+              .mem-box,
+              .bed-box {
+                margin-bottom: 7px;
+              }
             }
           }
         }
@@ -489,18 +721,38 @@ export default {
     }
   }
   .no-group {
-    padding-left: 10px;
+    min-width: 380px;
+    padding-left: 15px;
     .member,
     .bed {
       height: 200px;
+      background: #ffffff;
+      border: 1px solid #eeeeee;
+      box-shadow: 0 2px 4px 0 rgba(51, 144, 248, 0.1);
+      border-radius: 5px;
+      margin-bottom: 16px;
       .member__header,
       .bed_header {
-        background-color: #eee;
+        height: 29px;
+        line-height: 29px;
+        background: #f5f7fa;
+        border-radius: 5px 5px 0 0;
+        padding: 0 10px;
+        font-family: MicrosoftYaHei-Bold;
+        font-size: 12px;
+        color: #333333;
+        text-align: left;
       }
       .member_body,
       .bed_body {
         display: flex;
-        padding: 5px 5px;
+        flex-wrap: wrap;
+        padding: 7px 10px;
+        img {
+          width: 10px;
+          height: 10px;
+          margin: 5.5px 0;
+        }
       }
     }
   }
@@ -558,12 +810,39 @@ export default {
     }
   }
 }
+.mem-box,
+.bed-box {
+  border-radius: 4px;
+  margin: 0 10px 14px 0;
+  padding: 0 5px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  span {
+    line-height: 23px;
+    font-family: MicrosoftYaHei;
+    font-size: 12px;
+    color: #333333;
+    text-align: left;
+    margin-right: 5px;
+  }
+  img {
+    width: 8px;
+    height: 8px;
+    display: inline-block;
+    margin: 6.5px 0;
+  }
+}
 .mem-box {
-  border: 1px solid #409eff;
-  margin-right: 10px;
+  min-width: 90px;
+  height: 23px;
+  background: rgba(51, 144, 248, 0.1);
+  border: 1px solid rgba(51, 144, 248, 0.3);
 }
 .bed-box {
-  border: 1px solid #67c23a;
-  margin-right: 10px;
+  min-width: 48px;
+  height: 23px;
+  background: rgba(30, 205, 147, 0.1);
+  border: 1px solid rgba(30, 205, 147, 0.3);
 }
 </style>
