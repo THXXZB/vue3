@@ -5,7 +5,8 @@
       <router-link to="/study/mainTab">mainTab</router-link> |
       <router-link to="/study/table">table</router-link> |
       <router-link to="/study/iframe">iframe</router-link> |
-      <router-link to="/study/nurseTeam">nurse team</router-link>
+      <router-link to="/study/nurseTeam">nurse team</router-link> |
+      <router-link to="/study/unitTeam">unit team</router-link>
     </div>
     <div>
       <h1 style="font-size: 30px">一站式需求管理平台 study</h1>

@@ -94,6 +94,9 @@
 </template>
 <script>
 import AsyncComponent from "./async-component.vue";
+// import todoReq from "../services/api/todo/service";
+// import { awaitWrap } from "../services/service";
+// import { ElMessageBox } from "element-plus";
 export default {
   data() {
     return {
@@ -260,13 +263,54 @@ export default {
     "async-com": AsyncComponent, // 异步组件
   },
   computed: {
-    activeTabList: function () {
+    activeTabList: function() {
       return this.tabList.filter((item) => {
         return item.switch;
       });
     },
   },
+  async mounted() {
+    // const data = await awaitWrap(this.getData2());
+    const data = this.getData2()
+    console.log("mounted data*************", data);
+  },
   methods: {
+    // test req
+    getData2() {
+      let api =
+        "http://www.phonegap100.com/appapi.php?a=getPortalList&catid=20&page=1";
+      this.Axios.get(api)
+        .then((res) => {
+          console.log("getData------------", res.data);
+          this.list = res.data.result;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    // 请求个人代办事务数据
+    // getData() {
+    //   return new Promise((resolve, reject) => {
+    //     // 请求参数
+    //     let params = {
+    //       // id: 100000,
+    //       // type: 1,
+    //     };
+    //     // 请求数据
+    //     todoReq
+    //       .getTodoData(params)
+    //       .then((data) => {
+    //         console.log("todo data-------------", data);
+    //         resolve(data);
+    //       })
+    //       .catch((err) => {
+    //         ElMessageBox(err, "错误", {
+    //           confirmButtonText: "确定",
+    //         });
+    //         reject(err);
+    //       });
+    //   });
+    // },
     // 开始拖拽
     dragstart(value) {
       this.oldData = value;
@@ -284,15 +328,15 @@ export default {
         let oldIndex = this.itemList.indexOf(this.oldData);
         let newIndex = this.itemList.indexOf(this.newData);
         let newItems = [...this.itemList];
-        let newTabs = [...this.tabList]
+        let newTabs = [...this.tabList];
         // 删除老的节点
         newItems.splice(oldIndex, 1);
-        newTabs.splice(oldIndex+1, 1)
+        newTabs.splice(oldIndex + 1, 1);
         // 在列表中目标位置增加新的节点
         newItems.splice(newIndex, 0, this.oldData);
-        newTabs.splice(newIndex + 1, 0, this.tabList[oldIndex + 1])
+        newTabs.splice(newIndex + 1, 0, this.tabList[oldIndex + 1]);
         this.itemList = [...newItems];
-        this.tabList = [...newTabs]
+        this.tabList = [...newTabs];
       }
       console.log("dragend itemList", this.itemList);
     },
@@ -344,7 +388,7 @@ export default {
         // 如果开关为关
         if (this.activeTab === this.tabList[tabIndex].id) {
           // 如果内容页显示的正好是当前关闭的那一页，内容页显示当前页的上一页
-          console.log('changeSwitch', this.tabList)
+          console.log("changeSwitch", this.tabList);
           for (let i = tabIndex - 1; i >= 0; i--) {
             if (this.tabList[i].switch) {
               this.activeTab = this.tabList[i].id;

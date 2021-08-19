@@ -51,6 +51,9 @@ const routes = [
     },{
       path: 'nurseTeam',
       component: () => import('../study/nurse-team.vue')
+    },{
+      path: 'unitTeam',
+      component: () => import('../study/unit-team.vue')
     }]
   }
 ]

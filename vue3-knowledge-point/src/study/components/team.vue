@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-header>
-      <el-button class="add" @click="editTeam">新增</el-button>
+      <el-button class="add" @click="editTeam(null)">新增</el-button>
       <div class="input-box">
         <el-input placeholder="请输入内容" v-model="input4">
           <template #append>
@@ -61,7 +61,7 @@
                   <div v-show="item.expand">
                     <el-row justify="space-between">
                       <el-col :span="1"
-                        ><div class="add">
+                        ><div class="add" @click="editTeam(item)">
                           <img
                             src="http://10.1.51.218:7505/DZHL/assets/%E6%96%B0%E5%BB%BA@2x.png"
                             alt=""
@@ -72,12 +72,13 @@
                         <div class="member-grouped">
                           <div
                             class="mem-box"
-                            v-for="member in item.memberList"
+                            v-for="(member, i) in item.memberList"
                             :key="member.id"
                           >
                             <span>{{ member.name }}</span>
                             <span>{{ member.code }}</span>
                             <img
+                              @click="deleteMemberIndex(index, i, member)"
                               src="http://10.1.51.218:7505/DZHL/assets/%E5%85%B3%E9%97%AD01@2x.png"
                               alt=""
                             />
@@ -87,7 +88,7 @@
                     </el-row>
                     <el-row justify="space-between">
                       <el-col :span="1"
-                        ><div class="add">
+                        ><div class="add" @click="editTeam(item)">
                           <img
                             src="http://10.1.51.218:7505/DZHL/assets/%E6%96%B0%E5%BB%BA@2x.png"
                             alt=""
@@ -98,11 +99,12 @@
                         <div class="bed-grouped">
                           <div
                             class="bed-box"
-                            v-for="bed in item.bedList"
+                            v-for="(bed, i) in item.bedList"
                             :key="bed.id"
                           >
                             <span>{{ bed.code }}</span>
                             <img
+                              @click="deleteBedIndex(index, i, bed)"
                               src="http://10.1.51.218:7505/DZHL/assets/%E5%85%B3%E9%97%AD01@2x.png"
                               alt=""
                             />
@@ -130,7 +132,7 @@
                   <span>{{ item.name }}</span
                   ><span>{{ item.code }}</span
                   ><img
-                    src="http://10.1.51.218:7505/DZHL/assets/%E6%96%B0%E5%BB%BA01@2x.png"
+                    src=""
                     alt=""
                   />
                 </div>
@@ -146,7 +148,7 @@
                 >
                   <span>{{ item.code }}</span
                   ><img
-                    src="http://10.1.51.218:7505/DZHL/assets/%E6%96%B0%E5%BB%BA01@2x.png"
+                    src=""
                     alt=""
                   />
                 </div>
@@ -159,11 +161,11 @@
     <!-- 编辑小组弹窗 -->
     <el-dialog title="责任组编辑" v-model="showEditTeam" width="70%">
       <div class="teamName">
-        <i>*</i><span>责任组名称：</span
-        ><el-input placeholder="请输入内容" v-model="editTeamName"></el-input>
+        <span><i>* </i>责任组名称：</span>
+        <el-input placeholder="请输入内容" v-model="editTeamName"></el-input>
       </div>
-      <div class="grouped">
-        <div class="member">
+      <div class="member">
+        <div class="grouped">
           <div class="member__header">责任组成员</div>
           <div class="member__body">
             <div
@@ -173,26 +175,15 @@
             >
               <span>{{ item.name }}</span
               ><span>{{ item.code }}</span
-              ><i> X</i>
+              ><img
+                @click="deleteMember(item)"
+                src="http://10.1.51.218:7505/DZHL/assets/%E5%85%B3%E9%97%AD01@2x.png"
+                alt=""
+              />
             </div>
           </div>
         </div>
-        <div class="bed">
-          <div class="bed__header">责任组床位</div>
-          <div class="bed__body">
-            <div
-              class="bed-box"
-              v-for="(item, index) in editTeamBedList"
-              :key="index"
-            >
-              <span>{{ item.code }}</span
-              ><span> X</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="no-group">
-        <div class="member">
+        <div class="no-group">
           <div class="member__header">未分组成员</div>
           <div class="member__body">
             <div
@@ -202,11 +193,34 @@
             >
               <span>{{ item.name }}</span
               ><span>{{ item.code }}</span
-              ><i>+</i>
+              ><img
+                @click="addMember(item)"
+                src="http://10.1.51.218:7505/DZHL/assets/%E6%96%B0%E5%BB%BA01@2x.png"
+                alt=""
+              />
             </div>
           </div>
         </div>
-        <div class="bed">
+      </div>
+      <div class="bed">
+        <div class="grouped">
+          <div class="bed__header">责任组床位</div>
+          <div class="bed__body">
+            <div
+              class="bed-box"
+              v-for="(item, index) in editTeamBedList"
+              :key="index"
+            >
+              <span>{{ item.code }}</span
+              ><img
+                @click="deleteBed(item)"
+                src="http://10.1.51.218:7505/DZHL/assets/%E5%85%B3%E9%97%AD01@2x.png"
+                alt=""
+              />
+            </div>
+          </div>
+        </div>
+        <div class="no-group">
           <div class="bed__header">未分组床位</div>
           <div class="bed__body">
             <div
@@ -214,14 +228,19 @@
               v-for="(item, index) in noGroupBedList"
               :key="index"
             >
-              {{ item.code }}
+              <span>{{ item.code }}</span>
+              <img
+                @click="addBed(item)"
+                src="http://10.1.51.218:7505/DZHL/assets/%E6%96%B0%E5%BB%BA01@2x.png"
+                alt=""
+              />
             </div>
           </div>
         </div>
       </div>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="showEditTeam = false">取 消</el-button>
+          <el-button @click="back">取 消</el-button>
           <el-button type="primary" @click="saveEditTeam">确 定</el-button>
         </span>
       </template>
@@ -232,10 +251,13 @@
 export default {
   data() {
     return {
+      addOrEdit: null, // 判断当前编辑弹窗是增加小组还是编辑小组
       showEditTeam: false, // 护理小组编辑弹窗
       editTeamName: "", // 当前编辑小组的名称
       editTeamMemberList: [], //当前编辑小组的人员列表
       editTeamBedList: [], //当前编辑小组的床位列表
+      tempMemberList: [],
+      tempBedList: [],
       teamList: [
         //小组列表
         {
@@ -538,18 +560,130 @@ export default {
     },
   },
   methods: {
+    // 小组删除成员
+    deleteMemberIndex(index, i, member) {
+      console.log(index, i, member);
+      this.teamList[index].memberList.splice(i, 1)
+      let i2 = this.memberList.findIndex((item) => {
+        return item.id === member.id;
+      });
+      this.memberList[i2].grouped = false;
+    },
+    // 小组删除床位
+    deleteBedIndex(index, i, bed) {
+      console.log(index, i, bed);
+      this.teamList[index].bedList.splice(i, 1)
+      let i2 = this.bedList.findIndex((item) => {
+        return item.id === bed.id;
+      });
+      this.bedList[i2].grouped = false;
+    },
+    // 深复制
+    deepClone(obj) {
+      let _obj = JSON.stringify(obj),
+        objClone = JSON.parse(_obj);
+      return objClone;
+    },
+    // 弹窗新增成员
+    addMember(member) {
+      // console.log(member)
+      let index = this.memberList.indexOf(member);
+      // console.log(this.memberList[index], this.tempMemberList[index]);
+      this.memberList[index].grouped = true;
+      // console.log(this.memberList[index], this.tempMemberList[index]);
+      this.editTeamMemberList.push(member);
+      // console.log(this.editTeamMemberList, this.memberList)
+    },
+    // 弹窗删除成员
+    deleteMember(member) {
+      // console.log(member)
+      let index = this.editTeamMemberList.indexOf(member);
+      this.editTeamMemberList.splice(index, 1);
+      console.log(this.editTeamMemberList, this.memberList, member);
+      // member.grouped = false
+      // let index1 = this.memberList.indexOf(member)  // 为啥没用嘞
+      let index2 = this.memberList.findIndex((item) => {
+        return item.id === member.id;
+      });
+      this.memberList[index2].grouped = false;
+    },
+    // 弹窗新增床位
+    addBed(bed) {
+      // console.log(bed);
+      let index = this.bedList.indexOf(bed);
+      this.bedList[index].grouped = true;
+      this.editTeamBedList.push(bed);
+    },
+    // 弹窗删除床位
+    deleteBed(bed) {
+      let index = this.editTeamBedList.indexOf(bed);
+      this.editTeamBedList.splice(index, 1);
+      // member.grouped = false
+      // let index1 = this.memberList.indexOf(member)  // 为啥没用嘞
+      let index2 = this.bedList.findIndex((item) => {
+        return item.id === bed.id;
+      });
+      this.bedList[index2].grouped = false;
+    },
     // 编辑小组
     editTeam(team) {
-      this.showEditTeam = true;
+      // console.log('addEdit---------------', this.addOrEdit, team)
+      this.showEditTeam = true; // 打开弹窗
+      // 保存编辑之前的成员列表和床位列表
+      this.tempMemberList = this.deepClone(this.memberList);
+      this.tempBedList = this.deepClone(this.bedList);
+      // console.log("team------", team);
       if (team) {
+        // 编辑小组
+        this.addOrEdit = team;
         this.editTeamName = team.teamName;
-        this.editTeamMemberList = team.memberList;
-        this.editTeamBedList = team.bedList;
+        this.editTeamMemberList = [...team.memberList];
+        this.editTeamBedList = [...team.bedList];
+      } else {
+        this.addOrEdit = null;
       }
     },
     // 保存编辑小组
     saveEditTeam() {
       this.showEditTeam = false;
+      if (this.addOrEdit) {
+        // 编辑小组
+        let index = this.teamList.indexOf(this.addOrEdit);
+        // console.log(index);
+        this.teamList[index].memberList = [...this.editTeamMemberList];
+        this.teamList[index].bedList = [...this.editTeamBedList];
+
+        // console.log(this.editTeamMemberList, this.editTeamBedList)
+      } else {
+        // 新增小组
+        let team = {
+          teamName: this.editTeamName,
+          memberList: this.editTeamMemberList,
+          bedList: this.editTeamBedList,
+        };
+        console.log(team);
+        // 暂时还原成员列表和床位列表，待前后端对接后删除
+        this.memberList = [...this.tempMemberList];
+        this.bedList = [...this.tempBedList];
+      }
+      // 清空编辑之前保存的成员列表和床位列表
+      this.tempMemberList.length = 0;
+      this.tempBedList.length = 0;
+      // 清空当前编辑小组信息
+      this.editTeamName = "";
+      this.editTeamMemberList = [];
+      this.editTeamBedList = [];
+
+      this.addOrEdit = null;
+    },
+    // 取消编辑
+    back() {
+      this.showEditTeam = false;
+      this.addOrEdit = null;
+      // console.log(this.tempMemberList, this.tempBedList);
+      // 还原成员列表和床位列表
+      this.memberList = [...this.tempMemberList];
+      this.bedList = [...this.tempBedList];
     },
   },
 };
@@ -759,54 +893,107 @@ export default {
 }
 .el-overlay {
   .el-dialog {
-    height: 70%;
+    height: 62%;
     display: flex;
     flex-direction: column;
     .el-dialog__header {
       text-align: left;
-      height: 40px;
+      background: #f5f7fa;
+      border-radius: 4px 4px 0 0;
+      height: 30px;
+      line-height: 30px;
+      padding: 0 10px;
+      span {
+        font-family: MicrosoftYaHei-Bold;
+        font-size: 13px;
+        color: #333333;
+      }
+      .el-dialog__headerbtn {
+        top: 8px;
+        right: 8px;
+      }
     }
     .el-dialog__body {
       flex: 1;
-      // border: 1px solid #abe;
-      padding: 10px 20px;
+      padding: 10px 20px 15px;
       .teamName {
-        height: 40px;
+        height: 28px;
         display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        // border: 1px solid #abe;
+        span {
+          width: 90px;
+          font-family: MicrosoftYaHei;
+          font-size: 13px;
+          color: #2a2a2a;
+          i {
+            color: #f56c6c;
+          }
+        }
         .el-input {
-          width: 80%;
-        }
-      }
-      .grouped,
-      .no-group {
-        height: 45%;
-        display: flex;
-        // border: 1px solid #f3f;
-      }
-      .member,
-      .bed {
-        width: calc(50% - 10px);
-        height: 100%;
-        border: 1px solid #409eff;
-        .member__header,
-        .bed__header {
-          text-align: left;
-        }
-        .member__body,
-        .bed__body {
-          display: flex;
-          .mem-box,
-          .bed-box {
+          flex: 1;
+          line-height: 28px;
+          .el-input__inner {
+            height: 28px;
           }
         }
       }
+      .member,
       .bed {
-        margin-left: 20px;
+        // width: calc(100% - 40px);
+        margin-top: 20px;
+        display: flex;
+        .grouped,
+        .no-group {
+          width: 46%;
+          height: 30%;
+          min-width: 420px;
+          min-height: 150px;
+          background: rgba(245, 247, 250, 0.7);
+          border-radius: 4px;
+          padding: 8px 20px;
+          .member__header,
+          .bed__header {
+            font-family: MicrosoftYaHei-Bold;
+            font-size: 12px;
+            color: #333333;
+            line-height: 20px;
+            text-align: left;
+            margin-bottom: 8px;
+          }
+          .member__body,
+          .bed__body {
+            display: flex;
+            flex-wrap: wrap;
+          }
+        }
+        .no-group {
+          margin-left: 20px;
+        }
       }
     }
     .el-dialog__footer {
       height: 40px;
       padding: 0;
+      margin: 0 20px;
+      .el-button {
+        width: 56px;
+        height: 28px;
+        min-height: 28px;
+        padding: 0;
+        span {
+          line-height: 28px;
+          font-family: MicrosoftYaHei;
+          font-size: 13px;
+          color: #ffffff;
+          letter-spacing: 0;
+          text-align: center;
+        }
+        &.el-button--default span {
+          color: #666666;
+        }
+      }
     }
   }
 }
